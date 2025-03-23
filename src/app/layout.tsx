@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} h-screen w-screen`}>
-        <Provider>{children}</Provider>
+      <Provider>{children}</Provider>
       </body>
     </html>
   );
