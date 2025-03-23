@@ -1,3 +1,4 @@
+import { UserProfile } from "@/components/core/Profile"
 import { AppSidebar } from "@/components/sidebar/app-sidebar"
 import { Separator } from "@/components/ui/separator"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
@@ -15,8 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <div className="flex items-center gap-x-5">
-            {/* <UserProfile /> */}
-            Admin
+          <UserProfile />
           </div>
         </header>
         <div className="flex-1 overflow-auto rounded-xl bg-muted/50">
