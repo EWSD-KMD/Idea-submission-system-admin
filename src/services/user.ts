@@ -1,18 +1,35 @@
 "use server"
-import { UserType } from "@/schemas/userFormSchema";
+import { EditUserType } from "@/schemas/userFormSchema";
 import { serverFetch } from "./serverFetch";
+
+type UserType = {
+  email: string;
+  name: string;
+  roleId: number;
+  departmentId: number;
+  type: string;
+  password?: string;
+}
 
 export async function getAllUsers() {
   const response = await serverFetch("api/users");
+
   return response
-  
 }
 export async function createUser(data: UserType) {
-  console.log("data", data)
   const response = await serverFetch("api/users", {
     method: "POST",
     body: JSON.stringify(data),
   });
-  console.log("response", response);
+
+  return response
+}
+
+export async function updateUser(id: number, data: EditUserType){
+  const response = await serverFetch(`api/users/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+
   return response
 }
