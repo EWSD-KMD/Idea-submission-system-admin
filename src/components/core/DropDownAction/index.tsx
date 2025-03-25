@@ -8,16 +8,17 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 
-type ActionItem = {
+type ActionItem<T> = {
   label: string;
-  onClick: () => void;
+  onClick: (data: T) => void;
 };
 
-type ActionsDropdownProps = {
-  actions: ActionItem[];
+type ActionsDropdownProps<T> = {
+  actions: ActionItem<T>[];
+  data: T; 
 };
 
-const ActionsDropdown: React.FC<ActionsDropdownProps> = ({ actions }) => {
+const ActionsDropdown = <T,>({ actions, data }: ActionsDropdownProps<T>) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -29,7 +30,7 @@ const ActionsDropdown: React.FC<ActionsDropdownProps> = ({ actions }) => {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         {actions.map((action, index) => (
-          <DropdownMenuItem key={index} onClick={action.onClick}>
+          <DropdownMenuItem key={index} onClick={() => action.onClick(data)}>
             {action.label}
           </DropdownMenuItem>
         ))}

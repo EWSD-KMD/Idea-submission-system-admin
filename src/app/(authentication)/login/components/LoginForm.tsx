@@ -44,7 +44,7 @@ export function LoginForm({
       toast({
         title: "Login Success",
         description: `${response.message}` || "Login Success!",
-        variant: "destructive",
+        variant: "default",
       });
     }else {
       setIsLoading(false)
