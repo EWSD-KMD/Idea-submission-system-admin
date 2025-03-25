@@ -1,5 +1,10 @@
-export default function Page () {
+import MenuTable from "./components/MenuTable"
+import { getAllMenus } from "@/services/menu"
+
+export default async function Page () {
+  const data = await getAllMenus()
+
   return (
-    <>This is menus page</>
+    <MenuTable menus={data} />
   )
 }

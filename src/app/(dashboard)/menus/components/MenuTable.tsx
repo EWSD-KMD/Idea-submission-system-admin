@@ -3,25 +3,25 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { DataTable } from "@/components/core/DataTable"
 import ActionsDropdown from "@/components/core/DropDownAction"
-import type { Role, RoleResponse } from "@/types/role"
 import type { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
-import { RoleFormDIalog } from "./RoleFormDialog"
+import { Menu, MenuResponse } from "@/types/menu"
+import { MenuFormDIalog } from "./MenuFormDialog"
 
-export default function RoleTable({
-  roles
-}: { roles: RoleResponse }) {
+export default function MenuTable({
+  menus
+}: { menus: MenuResponse }) {
   const [search, setSearch] = useState("")
   const [open, setOpen] = useState(false)
-  const [selectedRole, setSelectedRole] = useState<Role | null>(null)
+  const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null)
 
-  const handleEdit = (role: Role) => {
-    setSelectedRole(role)
+  const handleEdit = (role: Menu) => {
+    setSelectedMenu(role)
     setOpen(true)
   }
 
   const handleCreate = () => {
-    setSelectedRole(null)
+    setSelectedMenu(null)
     setOpen(true)
   }
 
@@ -32,11 +32,11 @@ export default function RoleTable({
     },
     {
       label: "Delete",
-      onClick: (role: Role) => console.log("Delete role", role),
+      onClick: (menu: Menu) => console.log("Delete menu", menu),
     },
   ]
 
-  const columns: ColumnDef<Role>[] = [
+  const columns: ColumnDef<Menu>[] = [
     {
       accessorKey: "id",
       header: "Id",
@@ -49,8 +49,8 @@ export default function RoleTable({
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
-        const role = row.original
-        return <ActionsDropdown actions={actions} data={role} />
+        const menu = row.original
+        return <ActionsDropdown actions={actions} data={menu} />
       },
       enableHiding: false,
     },
@@ -69,16 +69,16 @@ export default function RoleTable({
           }}
         />
 
-        <Button onClick={handleCreate}>Create Role</Button>
+        <Button onClick={handleCreate}>Create Menu</Button>
       </div>
 
-      <DataTable data={roles?.data.roles || []} total={roles?.data.total || 0} columns={columns} />
+      <DataTable data={menus?.data || []} total={menus?.total || 0} columns={columns} />
 
-      <RoleFormDIalog
+      <MenuFormDIalog
         open={open}
         setOpen={setOpen}
-        roles={roles.data?.roles || []}
-        data={selectedRole}
+        menus={menus.data || []}
+        data={selectedMenu}
       />
     </div>
   )
