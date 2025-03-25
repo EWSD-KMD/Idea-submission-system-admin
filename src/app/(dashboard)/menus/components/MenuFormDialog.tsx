@@ -16,36 +16,38 @@ import { useForm } from "react-hook-form"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { toast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
-import type { Role } from "@/types/role"
-import { roleFormSchema, RoleType } from "@/schemas/roleFormSchema"
-import { createRole, updateRole } from "@/services/role"
+import { Menu } from "@/types/menu"
+import { menuFormSchema, MenuType } from "@/schemas/menuFormSchema"
+import { createMenu, updateMenu } from "@/services/menu"
 
-interface UserFormDialogProps {
+interface MenuFormDialogProps {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
-  roles: Role[]
-  data: Role | null
+  menus: Menu[]
+  data: Menu | null
 }
 
 const defaultValuesForCreate = () => {
   return {
-    name: ""
+    name: "",
+    permissions: ""
   }
 }
 
-const defaultValueForEdit = (data: Role) => {
+const defaultValueForEdit = (data: Menu) => {
   return {
-    name: data?.name || ""
+    name: data?.name || "",
+    permissions: data?.permissions || ""
   }
 }
 
-export function RoleFormDIalog({ open, setOpen, data }: UserFormDialogProps) {
+export function MenuFormDIalog({ open, setOpen, data }: MenuFormDialogProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const isEditMode = !!data
 
-  const form = useForm<RoleType>({
-    resolver: zodResolver(roleFormSchema),
+  const form = useForm<MenuType>({
+    resolver: zodResolver(menuFormSchema),
     defaultValues: isEditMode
       ? defaultValueForEdit(data)
       : defaultValuesForCreate()
@@ -61,17 +63,17 @@ export function RoleFormDIalog({ open, setOpen, data }: UserFormDialogProps) {
     }
   }, [data, open, form])
 
-  const onSubmit = async (values: RoleType) => {
+  const onSubmit = async (values: MenuType) => {
     setIsLoading(true)
 
     try {
       const response = isEditMode ? 
-        await updateRole(data!.id, values) : await createRole(values)
+        await updateMenu(data!.id, values) : await createMenu(values)
 
       if (response.message === "success") {
         toast({
           title: "Success",
-          description: isEditMode ? "Role updated successfully" : "Role created successfully",
+          description: isEditMode ? "Menu updated successfully" : "Menu created successfully",
         })
         router.refresh() 
         setOpen(false)
@@ -82,7 +84,7 @@ export function RoleFormDIalog({ open, setOpen, data }: UserFormDialogProps) {
       console.error("Error submitting form:", error)
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to process role data",
+        description: error instanceof Error ? error.message : "Failed to process menu data",
         variant: "destructive",
       })
     } finally {
@@ -94,9 +96,9 @@ export function RoleFormDIalog({ open, setOpen, data }: UserFormDialogProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{isEditMode ? "Edit Role" : "Create Role"}</DialogTitle>
+          <DialogTitle>{isEditMode ? "Edit Menu" : "Create Menu"}</DialogTitle>
           <DialogDescription>
-            {isEditMode ? "Update the role information below." : "Fill in the details to create a new role."}
+            {isEditMode ? "Update the menu information below." : "Fill in the details to create a new menu."}
           </DialogDescription>
         </DialogHeader>
 
@@ -116,6 +118,20 @@ export function RoleFormDIalog({ open, setOpen, data }: UserFormDialogProps) {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="permissions"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Permissions" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />  
 
             <DialogFooter className="pt-4">
               <Button type="submit" disabled={isLoading}>
