@@ -11,6 +11,8 @@ export interface User {
 export interface UserResponse {
   err: number;
   message: string;
-  data: User[];
+  data: {
+    data: User[]
+  };
   total: number;
 }

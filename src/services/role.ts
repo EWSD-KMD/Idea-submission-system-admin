@@ -13,6 +13,8 @@ export async function createRole(data: RoleType) {
     method: "POST",
     body: JSON.stringify(data),
   });
+
+  console.log("response", response);
   return response
 }
 

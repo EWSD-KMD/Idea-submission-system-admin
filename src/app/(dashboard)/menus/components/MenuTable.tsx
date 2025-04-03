@@ -8,15 +8,19 @@ import { Button } from "@/components/ui/button"
 import { Menu, MenuResponse } from "@/types/menu"
 import { MenuFormDIalog } from "./MenuFormDialog"
 
+type MenuTableProps = {
+  menus: MenuResponse,
+}
+
 export default function MenuTable({
   menus
-}: { menus: MenuResponse }) {
+}: MenuTableProps) {
   const [search, setSearch] = useState("")
   const [open, setOpen] = useState(false)
   const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null)
 
-  const handleEdit = (role: Menu) => {
-    setSelectedMenu(role)
+  const handleEdit = (menu: Menu) => {
+    setSelectedMenu(menu)
     setOpen(true)
   }
 
@@ -77,7 +81,6 @@ export default function MenuTable({
       <MenuFormDIalog
         open={open}
         setOpen={setOpen}
-        menus={menus.data || []}
         data={selectedMenu}
       />
     </div>

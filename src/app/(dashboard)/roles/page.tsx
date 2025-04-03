@@ -1,10 +1,13 @@
-import { getAllRoles } from "@/services/role"
-import RoleTable from "./components/RoleTable"
+import RoleManagementForm from "./components/RoleForm"
+import { getAllPermissions } from "@/services/permission"
 
 export default async function Page () {
-  const data = await getAllRoles()
+  
+  const permissions = await getAllPermissions()
 
   return (
-    <RoleTable roles={data} />
+    <div className="ml-6">
+      <RoleManagementForm permissions={permissions?.data}/>  
+    </div>
   )
 }

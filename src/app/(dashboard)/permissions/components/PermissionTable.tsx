@@ -3,25 +3,31 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { DataTable } from "@/components/core/DataTable"
 import ActionsDropdown from "@/components/core/DropDownAction"
-import type { Role, RoleResponse } from "@/types/role"
 import type { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
-import { RoleFormDIalog } from "./RoleFormDialog"
+import { Permission, PermissionResponse } from "@/types/permission"
+import { PermissionFormDialog } from "./PermissionFormDialog"
+import { MenuResponse } from "@/types/menu"
 
-export default function RoleTable({
-  roles
-}: { roles: RoleResponse }) {
+type PermissionTableProps = {
+  permissions: PermissionResponse,
+  menus: MenuResponse
+}
+export default function PermissionTable({
+  permissions,
+  menus
+}: PermissionTableProps) {
   const [search, setSearch] = useState("")
   const [open, setOpen] = useState(false)
-  const [selectedRole, setSelectedRole] = useState<Role | null>(null)
+  const [selectedPermission, setSelectedPermission] = useState<Permission | null>(null)
 
-  const handleEdit = (role: Role) => {
-    setSelectedRole(role)
+  const handleEdit = (role: Permission) => {
+    setSelectedPermission(role)
     setOpen(true)
   }
 
   const handleCreate = () => {
-    setSelectedRole(null)
+    setSelectedPermission(null)
     setOpen(true)
   }
 
@@ -32,18 +38,25 @@ export default function RoleTable({
     },
     {
       label: "Delete",
-      onClick: (role: Role) => console.log("Delete role", role),
+      onClick: (permission: Permission) => console.log("Delete permission", permission),
     },
   ]
 
-  const columns: ColumnDef<Role>[] = [
+  const columns: ColumnDef<Permission>[] = [
     {
       accessorKey: "id",
       header: "Id",
     },
     {
-      accessorKey: "name",
-      header: "Name",
+      accessorKey: "operation",
+      header: "Operation",
+    },
+    {
+      accessorKey: "menu",
+      header: "Menu",
+      cell: ({ row }) => {
+       return row.original.menu.name
+      },
     },
     {
       accessorKey: "actions",
@@ -69,16 +82,16 @@ export default function RoleTable({
           }}
         />
 
-        <Button onClick={handleCreate}>Create Role</Button>
+        <Button onClick={handleCreate}>Create Permission</Button>
       </div>
 
-      <DataTable data={roles?.data.roles || []} total={roles?.data.total || 0} columns={columns} />
+      <DataTable data={permissions?.data || []} total={permissions?.total || 0} columns={columns} />
 
-      <RoleFormDIalog
+      <PermissionFormDialog
         open={open}
         setOpen={setOpen}
-        roles={roles.data?.roles || []}
-        data={selectedRole}
+        data={selectedPermission}
+        menus={menus?.data}
       />
     </div>
   )
