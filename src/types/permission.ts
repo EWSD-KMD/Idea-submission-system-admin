@@ -4,9 +4,10 @@ export interface PermissionResponse {
   err: number;
   message: string;
   data: Permission[];
+  total: number;
 }
  
-enum Operation {
+export enum Operation {
   CREATE = "CREATE",
   READ = "READ",
   UPDATE = "UPDATE",
