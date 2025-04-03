@@ -20,24 +20,22 @@ import { Menu } from "@/types/menu"
 import { menuFormSchema, MenuType } from "@/schemas/menuFormSchema"
 import { createMenu, updateMenu } from "@/services/menu"
 
+
 interface MenuFormDialogProps {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
-  menus: Menu[]
   data: Menu | null
 }
 
 const defaultValuesForCreate = () => {
   return {
     name: "",
-    permissions: ""
   }
 }
 
 const defaultValueForEdit = (data: Menu) => {
   return {
     name: data?.name || "",
-    permissions: data?.permissions || ""
   }
 }
 
@@ -118,20 +116,6 @@ export function MenuFormDIalog({ open, setOpen, data }: MenuFormDialogProps) {
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="permissions"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Permissions" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />  
 
             <DialogFooter className="pt-4">
               <Button type="submit" disabled={isLoading}>

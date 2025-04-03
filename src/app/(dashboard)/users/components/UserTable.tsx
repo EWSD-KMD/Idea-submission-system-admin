@@ -15,6 +15,8 @@ export default function UserTable({
   departments,
   roles,
 }: { users: UserResponse; departments: DepartmentResponse; roles: RoleResponse }) {
+
+  console.log("users", users)
   const [search, setSearch] = useState("")
   const [open, setOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
@@ -93,7 +95,7 @@ export default function UserTable({
         <Button onClick={handleCreate}>Create User</Button>
       </div>
 
-      <DataTable data={users?.data || []} total={users?.total || 0} columns={columns} />
+      <DataTable data={users?.data.data || []} total={users?.total || 0} columns={columns} />
 
       <UserFormDialog
         open={open}

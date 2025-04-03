@@ -3,7 +3,6 @@ export interface Menu {
   name: string;
   createdAt: string;
   updatedAt: string;
-  permissions: string;
 }
 
 export interface MenuResponse {
