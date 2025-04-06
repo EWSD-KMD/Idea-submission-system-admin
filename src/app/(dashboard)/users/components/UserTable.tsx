@@ -1,6 +1,6 @@
 "use client"
 import { Input } from "@/components/ui/input"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { DataTable } from "@/components/core/DataTable"
 import ActionsDropdown from "@/components/core/DropDownAction"
 import { UserFormDialog } from "./UserFormDialog"
@@ -9,6 +9,7 @@ import type { DepartmentResponse } from "@/types/department"
 import type { RoleResponse } from "@/types/role"
 import type { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
+import { usePermission } from "@/hooks/use-permissions"
 
 export default function UserTable({
   users,
@@ -17,6 +18,8 @@ export default function UserTable({
 }: { users: UserResponse; departments: DepartmentResponse; roles: RoleResponse }) {
 
   console.log("users", users)
+
+  const { canCreate, canUpdate, canDelete } = usePermission()
   const [search, setSearch] = useState("")
   const [open, setOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
@@ -31,20 +34,47 @@ export default function UserTable({
     setOpen(true)
   }
 
-  const actions = [
-    {
-      label: "Edit",
-      onClick: handleEdit,
-    },
-    {
-      label: "Reset Password",
-      onClick: (user: User) => console.log("Reset password for", user),
-    },
-    {
-      label: "Delete",
-      onClick: (user: User) => console.log("Delete user", user),
-    },
-  ]
+  // const actions = [
+  //   {
+  //     label: "Edit",
+  //     onClick: handleEdit,
+  //   },
+  //   {
+  //     label: "Reset Password",
+  //     onClick: (user: User) => console.log("Reset password for", user),
+  //   },
+  //   {
+  //     label: "Delete",
+  //     onClick: (user: User) => console.log("Delete user", user),
+  //   },
+  // ]
+
+  const actions = useMemo(() => {
+    const permittedActions = []
+
+    if (canUpdate("Admin")) {
+      permittedActions.push({
+        label: "Edit",
+        onClick: handleEdit,
+      })
+    }
+
+    if (canUpdate("Admin")) {
+      permittedActions.push({
+        label: "Reset Password",
+        onClick: (user: User) => console.log("Reset password for", user),
+      })
+    }
+
+    if (canDelete("Admin")) {
+      permittedActions.push({
+        label: "Delete",
+        onClick: (user: User) => console.log("Delete user", user),
+      })
+    }
+
+    return permittedActions
+  }, [canUpdate, canDelete])
 
   const columns: ColumnDef<User>[] = [
     {
@@ -92,7 +122,9 @@ export default function UserTable({
           }}
         />
 
-        <Button onClick={handleCreate}>Create User</Button>
+        {
+          canCreate("Admin") && 
+          <Button onClick={handleCreate}>Create User</Button>}
       </div>
 
       <DataTable data={users?.data.data || []} total={users?.total || 0} columns={columns} />
