@@ -14,5 +14,5 @@ export interface UserResponse {
   data: {
     data: User[]
   };
-  total: number;
+  total?: number;
 }

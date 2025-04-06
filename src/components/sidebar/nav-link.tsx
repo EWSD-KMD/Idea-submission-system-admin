@@ -1,43 +1,37 @@
-"use client";
+"use client"
 
-import { type LucideIcon } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import type { LucideIcon } from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
-import {
-  SidebarGroup,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
+import { SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 export function NavLink({
   items,
 }: {
   items: {
-    name?: string;
-    url: string;
-    icon: LucideIcon;
-  }[];
+    name?: string
+    url: string
+    icon: LucideIcon
+  }[]
 }) {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   return (
     <SidebarGroup>
       <SidebarMenu>
         {items.map((item) => {
-          const isActive = pathname === item.url;
+          const isActive = pathname === item.url
 
           return (
-            <SidebarMenuItem key={item.name}>
+            <SidebarMenuItem key={item.url}>
               <SidebarMenuButton
                 asChild
                 tooltip={item.name}
                 className={cn("h-10", {
-                  "bg-primary text-white hover:bg-primary hover:text-white":
-                    isActive,
+                  "bg-primary text-white hover:bg-primary hover:text-white": isActive,
                 })}
               >
                 <Link href={item.url}>
@@ -46,9 +40,10 @@ export function NavLink({
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          );
+          )
         })}
       </SidebarMenu>
     </SidebarGroup>
-  );
+  )
 }
+
