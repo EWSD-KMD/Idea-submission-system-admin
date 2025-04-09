@@ -2,11 +2,9 @@
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { DataTable } from "@/components/core/DataTable"
-import ActionsDropdown from "@/components/core/DropDownAction"
 import type { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import { Idea, IdeaResponse } from "@/types/idea"
-import { usePermission } from "@/hooks/use-permissions"
 
 type IdeaTableProps = {
   ideas: IdeaResponse,
@@ -29,12 +27,12 @@ export default function IdeaTable({
     console.log('export')
   }
 
-  const actions = [
-    // {
-    //   label: "View",
-    //   onClick: handleView,
-    // },
-  ]
+  // const actions = [
+  //   // {
+  //   //   label: "View",
+  //   //   onClick: handleView,
+  //   // },
+  // ]
 
   const columns: ColumnDef<Idea>[] = [
     {
@@ -48,16 +46,7 @@ export default function IdeaTable({
     {
       accessorKey: "description",
       header: "Description",
-    },
-    {
-      accessorKey: "actions",
-      header: "Actions",
-      cell: ({ row }) => {
-        const idea = row.original
-        return <ActionsDropdown actions={actions} data={idea} />
-      },
-      enableHiding: false,
-    },
+    }
   ]
 
   return (
