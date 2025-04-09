@@ -1,5 +1,11 @@
-export default function Page () {
+import { getAllDepartments } from "@/services/department"
+import DepartmentTable from "./components/DepartmentsTable"
+
+export default async function Page () {
+
+  const departments = await getAllDepartments()
+
   return (
-    <>This is departments page</>
+    <DepartmentTable departments={departments}/>
   )
 }
