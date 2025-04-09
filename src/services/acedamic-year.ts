@@ -1,6 +1,6 @@
 "use server"
 
-import { AcademicYearResponse } from "@/types/academic-year";
+import { AcademicYearResponse, CurrentAcademicYearResponse } from "@/types/academic-year";
 import { serverFetch } from "./serverFetch";
 import { AcademicYearType } from "@/schemas/academicYearFormSchema";
 
@@ -9,6 +9,20 @@ export async function getAllAcademicYears() {
   return response
   
 }
+export async function getCurrentAcademicYear() {
+  const response: CurrentAcademicYearResponse = await serverFetch("api/admin/masterSetting");
+  return response
+}
+
+export async function setCurrentAcademicYear(data: {currentAcademicYearId: number}) {
+  const response = await serverFetch(`api/admin/masterSetting/1`, {
+    method: "PUT",  
+    body: JSON.stringify(data),
+  })
+
+  return response
+}
+
 export async function createAcademicYear(data: AcademicYearType) {
   const response = await serverFetch("api/academicYears", {
     method: "POST",
