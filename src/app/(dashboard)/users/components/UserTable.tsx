@@ -17,8 +17,6 @@ export default function UserTable({
   roles,
 }: { users: UserResponse; departments: DepartmentResponse; roles: RoleResponse }) {
 
-  console.log("users", users)
-
   const { canCreate, canUpdate, canDelete } = usePermission()
   const [search, setSearch] = useState("")
   const [open, setOpen] = useState(false)
@@ -29,25 +27,11 @@ export default function UserTable({
     setOpen(true)
   }
 
+  console.log("hello")
   const handleCreate = () => {
     setSelectedUser(null)
     setOpen(true)
   }
-
-  // const actions = [
-  //   {
-  //     label: "Edit",
-  //     onClick: handleEdit,
-  //   },
-  //   {
-  //     label: "Reset Password",
-  //     onClick: (user: User) => console.log("Reset password for", user),
-  //   },
-  //   {
-  //     label: "Delete",
-  //     onClick: (user: User) => console.log("Delete user", user),
-  //   },
-  // ]
 
   const actions = useMemo(() => {
     const permittedActions = []

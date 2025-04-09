@@ -34,7 +34,7 @@ interface UserFormDialogProps {
 type FormValues = {
   email: string
   name: string
-  password?: string 
+  password?: string
   roleId: number
   departmentId: number
   type: string
@@ -45,7 +45,7 @@ const defaultValuesForCreate = () => {
     email: "",
     name: "",
     password: "",
-    roleId: 0,
+    roleId: undefined,
     departmentId: 0,
     type: "",
   }
@@ -73,6 +73,8 @@ export function UserFormDialog({ open, setOpen, departments, roles, data }: User
       : defaultValuesForCreate()
   })
 
+  const userType = form.watch("type")
+
   useEffect(() => {
     if (open) {
       if (data) {
@@ -87,7 +89,7 @@ export function UserFormDialog({ open, setOpen, departments, roles, data }: User
     setIsLoading(true)
 
     try {
-      const response = isEditMode ? 
+      const response = isEditMode ?
         await updateUser(data!.id, values) : await createUser(values)
 
       if (response.message === "success") {
@@ -95,7 +97,7 @@ export function UserFormDialog({ open, setOpen, departments, roles, data }: User
           title: "Success",
           description: isEditMode ? "User updated successfully" : "User created successfully",
         })
-        router.refresh() 
+        router.refresh()
         setOpen(false)
       } else {
         throw new Error(response.message || "Operation failed")
@@ -168,7 +170,30 @@ export function UserFormDialog({ open, setOpen, departments, roles, data }: User
               />
             )}
 
-            <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>User Type</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value || undefined}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select user type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="USER">User</SelectItem>
+                      <SelectItem value="ADMIN">Admin</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+
+            {userType === "ADMIN" &&
               <FormField
                 control={form.control}
                 name="roleId"
@@ -196,57 +221,37 @@ export function UserFormDialog({ open, setOpen, departments, roles, data }: User
                   </FormItem>
                 )}
               />
+            }
 
-              <FormField
-                control={form.control}
-                name="departmentId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Department</FormLabel>
-                    <Select
-                      onValueChange={(value) => field.onChange(Number.parseInt(value))}
-                      value={field.value ? field.value.toString() : undefined}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a department" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {departments.map((dept) => (
-                          <SelectItem key={dept.id} value={dept.id.toString()}>
-                            {dept.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
 
             <FormField
               control={form.control}
-              name="type"
+              name="departmentId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>User Type</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value || undefined}>
+                  <FormLabel>Department</FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(Number.parseInt(value))}
+                    value={field.value ? field.value.toString() : undefined}
+                  >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select user type" />
+                        <SelectValue placeholder="Select a department" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="USER">User</SelectItem>
-                      <SelectItem value="ADMIN">Admin</SelectItem>
+                      {departments.map((dept) => (
+                        <SelectItem key={dept.id} value={dept.id.toString()}>
+                          {dept.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
 
             <DialogFooter className="pt-4">
               <Button type="submit" disabled={isLoading}>

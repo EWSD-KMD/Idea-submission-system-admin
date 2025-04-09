@@ -23,5 +23,8 @@ export async function updateRole(id: number, data: RoleType) {
     method: "PUT",
     body: JSON.stringify(data),
   });
+
+  console.log("response", response);
+
   return response
 }
