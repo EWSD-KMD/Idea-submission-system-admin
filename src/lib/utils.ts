@@ -2,7 +2,6 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Cookie from "js-cookie";
 import CryptoJS from "crypto-js";
-import { ItemWithIdeas } from "@/types/reports-chart";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
