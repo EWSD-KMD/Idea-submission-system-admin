@@ -1,22 +1,29 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 import Cookie from "js-cookie";
 import CryptoJS from "crypto-js";
+import { ItemWithIdeas } from "@/types/reports-chart";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export function encrypt(data?: string) {
   if (!data) return "";
-  const cipherText = CryptoJS.AES.encrypt(data, process.env.NEXT_PUBLIC_ENCRYPT_KEY as string);
+  const cipherText = CryptoJS.AES.encrypt(
+    data,
+    process.env.NEXT_PUBLIC_ENCRYPT_KEY as string
+  );
   return cipherText.toString();
 }
 
 export function decrypt(data?: string) {
   try {
     if (!data) return "";
-    const bytes = CryptoJS.AES.decrypt(data, process.env.NEXT_PUBLIC_ENCRYPT_KEY as string);
+    const bytes = CryptoJS.AES.decrypt(
+      data,
+      process.env.NEXT_PUBLIC_ENCRYPT_KEY as string
+    );
     return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
   } catch {
     return "";
@@ -51,5 +58,3 @@ export const setAuthSession = (data: object) => {
 export const removeAuthSession = () => {
   return removeCookie(process.env.NEXT_PUBLIC_AUTH_COOKIE_NAME as string);
 };
-
-
