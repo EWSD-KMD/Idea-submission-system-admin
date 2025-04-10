@@ -1,33 +1,46 @@
-"use client"
-import { Input } from "@/components/ui/input"
-import { useState } from "react"
-import { DataTable } from "@/components/core/DataTable"
-import ActionsDropdown from "@/components/core/DropDownAction"
-import type { ColumnDef } from "@tanstack/react-table"
-import { Button } from "@/components/ui/button"
-import { Menu, MenuResponse } from "@/types/menu"
-import { MenuFormDIalog } from "./MenuFormDialog"
+"use client";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { DataTable } from "@/components/core/DataTable";
+import ActionsDropdown from "@/components/core/DropDownAction";
+import type { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
+import { Menu, MenuResponse } from "@/types/menu";
+import { MenuFormDIalog } from "./MenuFormDialog";
+import { deleteMenu } from "@/services/menu";
+import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 type MenuTableProps = {
-  menus: MenuResponse,
-}
+  menus: MenuResponse;
+};
 
-export default function MenuTable({
-  menus
-}: MenuTableProps) {
-  const [search, setSearch] = useState("")
-  const [open, setOpen] = useState(false)
-  const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null)
+export default function MenuTable({ menus }: MenuTableProps) {
+  const router = useRouter();
+  const [search, setSearch] = useState("");
+  const [open, setOpen] = useState(false);
+  const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
 
   const handleEdit = (menu: Menu) => {
-    setSelectedMenu(menu)
-    setOpen(true)
-  }
+    setSelectedMenu(menu);
+    setOpen(true);
+  };
 
   const handleCreate = () => {
-    setSelectedMenu(null)
-    setOpen(true)
-  }
+    setSelectedMenu(null);
+    setOpen(true);
+  };
+
+  const handleDelete = async (data: Menu) => {
+    const response = await deleteMenu(data.id);
+    if (response.message === "success") {
+      toast({
+        title: "Success",
+        description: "Menu deleted successfully",
+      });
+      router.refresh();
+    }
+  };
 
   const actions = [
     {
@@ -36,9 +49,9 @@ export default function MenuTable({
     },
     {
       label: "Delete",
-      onClick: (menu: Menu) => console.log("Delete menu", menu),
+      onClick: handleDelete,
     },
-  ]
+  ];
 
   const columns: ColumnDef<Menu>[] = [
     {
@@ -53,12 +66,12 @@ export default function MenuTable({
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
-        const menu = row.original
-        return <ActionsDropdown actions={actions} data={menu} />
+        const menu = row.original;
+        return <ActionsDropdown actions={actions} data={menu} />;
       },
       enableHiding: false,
     },
-  ]
+  ];
 
   return (
     <div className="flex flex-col gap-8 p-4">
@@ -69,21 +82,20 @@ export default function MenuTable({
           className="w-80"
           value={search}
           onChange={(e) => {
-            setSearch(e.target.value)
+            setSearch(e.target.value);
           }}
         />
 
         <Button onClick={handleCreate}>Create Menu</Button>
       </div>
 
-      <DataTable data={menus?.data || []} total={menus?.total || 0} columns={columns} />
-
-      <MenuFormDIalog
-        open={open}
-        setOpen={setOpen}
-        data={selectedMenu}
+      <DataTable
+        data={menus?.data || []}
+        total={menus?.total || 0}
+        columns={columns}
       />
-    </div>
-  )
-}
 
+      <MenuFormDIalog open={open} setOpen={setOpen} data={selectedMenu} />
+    </div>
+  );
+}
