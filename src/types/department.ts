@@ -9,11 +9,13 @@ export interface DepartmentResponse {
     totalPages: number;
   };
 }
- 
+
 export interface Department {
   id: number;
-  name: string;   
+  name: string;
   createdAt: string;
   updatedAt: string;
+  _count: {
+    ideas: number;
+  };
 }
-

@@ -1,7 +1,7 @@
 enum Status {
-  SHOW ='SHOW',
-  HIDE = 'HIDE',
-  DELETED ='DELETED'
+  SHOW = "SHOW",
+  HIDE = "HIDE",
+  DELETED = "DELETED",
 }
 
 export interface Category {
@@ -10,6 +10,9 @@ export interface Category {
   status: Status;
   createdAt: string;
   updatedAt: string;
+  _count: {
+    ideas: number;
+  };
 }
 
 export interface CategoryResponse {
@@ -17,6 +20,6 @@ export interface CategoryResponse {
   message: string;
   data: {
     categories: Category[];
-    total: number
-  }
+    total: number;
+  };
 }

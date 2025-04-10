@@ -1,26 +1,32 @@
-"use server"
+"use server";
 
-import { AcademicYearResponse, CurrentAcademicYearResponse } from "@/types/academic-year";
+import {
+  AcademicYearResponse,
+  getCurrentAcademicYearResponse,
+} from "@/types/academic-year";
 import { serverFetch } from "./serverFetch";
 import { AcademicYearType } from "@/schemas/academicYearFormSchema";
 
 export async function getAllAcademicYears() {
   const response: AcademicYearResponse = await serverFetch("api/academicYears");
-  return response
-  
+  return response;
 }
 export async function getCurrentAcademicYear() {
-  const response: CurrentAcademicYearResponse = await serverFetch("api/admin/masterSetting");
-  return response
+  const response: getCurrentAcademicYearResponse = await serverFetch(
+    "api/admin/masterSetting"
+  );
+  return response;
 }
 
-export async function setCurrentAcademicYear(data: {currentAcademicYearId: number}) {
+export async function setCurrentAcademicYear(data: {
+  currentAcademicYearId: number;
+}) {
   const response = await serverFetch(`api/admin/masterSetting/1`, {
-    method: "PUT",  
+    method: "PUT",
     body: JSON.stringify(data),
-  })
+  });
 
-  return response
+  return response;
 }
 
 export async function createAcademicYear(data: AcademicYearType) {
@@ -28,7 +34,7 @@ export async function createAcademicYear(data: AcademicYearType) {
     method: "POST",
     body: JSON.stringify(data),
   });
-  return response
+  return response;
 }
 
 export async function updateAcademicYear(id: number, data: AcademicYearType) {
@@ -36,5 +42,5 @@ export async function updateAcademicYear(id: number, data: AcademicYearType) {
     method: "PUT",
     body: JSON.stringify(data),
   });
-  return response
+  return response;
 }

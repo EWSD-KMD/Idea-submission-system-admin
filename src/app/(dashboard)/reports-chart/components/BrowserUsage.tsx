@@ -129,10 +129,10 @@ export default function BrowserUsage() {
             leadingBrowser.browser.slice(1)}{" "}
           leads with{" "}
           {((leadingBrowser.visitors / totalVisitors) * 100).toFixed(1)}% market
-          share <TrendingUp className="h-4 w-4" />
+          share.
         </div>
         <div className="leading-none text-muted-foreground">
-          Based on browser usage statistics across all users
+          Based on browser usage statistics across all users.
         </div>
       </CardFooter>
     </Card>
