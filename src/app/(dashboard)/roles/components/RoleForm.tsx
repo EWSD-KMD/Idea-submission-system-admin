@@ -177,6 +177,8 @@ export default function RoleManagementForm({permissions}: RoleManagementFormProp
       const response = activeRole ?
         await updateRole(activeRole, payload) : await createRole(payload)
 
+      console.log("response", response)
+
       if (response.message === "success") {
         toast({
           title: activeRole ? "Role Updated" : "Role Created",

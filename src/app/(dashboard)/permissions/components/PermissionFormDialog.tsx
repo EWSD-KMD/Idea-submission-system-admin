@@ -58,6 +58,26 @@ const actions = [
   {
     label: "DELETE",
     value: "DELETE"
+  },
+  {
+    label: "EXPORT",
+    value: "EXPORT"
+  },
+  {
+    label: "DISABLE",
+    value: "DISABLE"
+  },
+  {
+    label: "FULLY_DISABLE",
+    value: "FULLY_DISABLE"
+  },
+  {
+    label: "ENABLE",
+    value: "ENABLE"
+  },
+  {
+    label: "HIDE",
+    value: "HIDE"
   }
 ]
 

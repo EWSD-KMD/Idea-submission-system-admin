@@ -4,17 +4,35 @@ import { Sidebar, SidebarContent, SidebarHeader } from "@/components/ui/sidebar"
 import Image from "next/image"
 import { NavLink } from "./nav-link"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Home, Shield, Settings, LayoutDashboard, FileText, type LucideIcon } from "lucide-react"
+import {
+  LayoutDashboard,
+  Users,
+  KeyRound,
+  ListTree,
+  Shield,
+  Folder,
+  Building2,
+  CalendarDays,
+  Settings,
+  FileText,
+  Lightbulb,
+  LucideIcon,
+  Home,
+} from 'lucide-react';
 import { useAuth } from "../core/AuthProvider"
 
 const menuToRouteMap: Record<string, { route: string; icon: LucideIcon }> = {
   Dashboard: { route: "/dashboard", icon: LayoutDashboard },
-  Admin: { route: "/users", icon: Home },
-  Role: { route: "/roles", icon: Shield },
-  Menu: { route: "/menus", icon: Shield },
+  Admin: { route: "/users", icon: Users },
+  Role: { route: "/roles", icon: KeyRound },
+  Menu: { route: "/menus", icon: ListTree },
   Permission: { route: "/permissions", icon: Shield },
+  Category: { route: "/categories", icon: Folder },
+  Department: { route: "/departments", icon: Building2 },
+  AcademicYear: { route: "/academic-years", icon: CalendarDays },
   Settings: { route: "/settings", icon: Settings },
-  Reports: { route: "/reports", icon: FileText },
+  Report: { route: "/reports", icon: FileText },
+  Idea: { route: "/ideas", icon: Lightbulb },
 }
 
 const defaultIcon = Home

@@ -14,7 +14,7 @@ type ActionItem<T> = {
 };
 
 type ActionsDropdownProps<T> = {
-  actions: ActionItem<T>[];
+  actions: ActionItem<T>[] | [];
   data: T; 
 };
 

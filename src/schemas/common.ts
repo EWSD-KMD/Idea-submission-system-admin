@@ -9,3 +9,4 @@ export const requiredString = (errMessage = "this field is required") =>
 
 export const requiredNumber = (errMessage = "this field is require") =>
   z.number().min(1, { message: errMessage });
+
