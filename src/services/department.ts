@@ -9,11 +9,17 @@ export async function getAllDepartments() {
 }
 
 export async function createDepartment(data: DepartmentType) {
-  console.log("data", data)
   const response = await serverFetch("api/departments", {
     method: "POST",
     body: JSON.stringify(data),
   });
-  console.log("response", response);
+  return response
+}
+
+export async function updateDepartment(id: number, data: DepartmentType) {
+  const response = await serverFetch(`api/departments/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
   return response
 }

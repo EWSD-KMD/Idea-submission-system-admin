@@ -27,6 +27,7 @@ export function LoginForm({
     defaultValues: {
       email: "",
       password: "",
+      source: "ADMIN"
     },
     resolver: zodResolver(loginSchema),
   });
@@ -36,6 +37,7 @@ export function LoginForm({
   const [isLoading, setIsLoading] = useState(false)
 
   const onSubmit = async(data: LoginType) => {
+    console.log("data", data)
     setIsLoading(true)
     const response: LoginResponse = await userLogin(data)
     if (response.message === "success") {

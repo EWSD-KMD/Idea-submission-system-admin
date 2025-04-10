@@ -1,30 +1,52 @@
 "use client"
 
 import { useAuth } from "@/components/core/AuthProvider"
-import { useMemo } from "react"
+import { useMemo, useCallback, useRef } from "react"
+
+type PermissionAction = 
+  | "CREATE"
+  | "READ"
+  | "UPDATE"
+  | "DELETE"
+  | "EXPORT"
+  | "DISABLE"
+  | "FULLY_DISABLE"
+  | "ENABLE"
 
 export function usePermission() {
+  // Only extract what we need from useAuth
   const { hasPermission, profileLoading } = useAuth()
+  
+  // Use ref to store the latest hasPermission function
+  const hasPermissionRef = useRef(hasPermission)
+  hasPermissionRef.current = hasPermission
 
-  return useMemo(() => {
-    const can = (action: string, menuName: string) => {
-      if (profileLoading) return false
-      return hasPermission(menuName, action)
-    }
+  // Use ref for loading state to avoid dependency in can function
+  const loadingRef = useRef(profileLoading)
+  loadingRef.current = profileLoading
 
-    const canCreate = (menuName: string) => can("CREATE", menuName)
-    const canRead = (menuName: string) => can("READ", menuName)
-    const canUpdate = (menuName: string) => can("UPDATE", menuName)
-    const canDelete = (menuName: string) => can("DELETE", menuName)
+  // Stable can function that doesn't change between renders
+  const can = useCallback((action: PermissionAction | string, menuName: string) => {
+    if (loadingRef.current) return false
+    return hasPermissionRef.current(menuName, action)
+  }, []) // No dependencies - uses refs instead
 
-    return {
+  // Create stable permission methods
+  const permissionMethods = useMemo(() => {
+    const methods = {
       can,
-      canCreate,
-      canRead,
-      canUpdate,
-      canDelete,
-      isLoading: profileLoading,
+      canCreate: (menuName: string) => can("CREATE", menuName),
+      canRead: (menuName: string) => can("READ", menuName),
+      canUpdate: (menuName: string) => can("UPDATE", menuName),
+      canDelete: (menuName: string) => can("DELETE", menuName),
+      canExport: (menuName: string) => can("EXPORT", menuName),
+      canDisable: (menuName: string) => can("DISABLE", menuName),
+      canFullyDisable: (menuName: string) => can("FULLY_DISABLE", menuName),
+      canEnable: (menuName: string) => can("ENABLE", menuName),
+      isLoading: profileLoading
     }
-  }, [hasPermission, profileLoading])
-}
+    return methods
+  }, [can, profileLoading]) // Only recreate when profileLoading changes
 
+  return permissionMethods
+}
