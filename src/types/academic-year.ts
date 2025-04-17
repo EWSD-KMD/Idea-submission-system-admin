@@ -10,7 +10,7 @@ export interface AcademicYearResponse {
   };
 }
 
-export interface getCurrentAcademicYearResponse {
+export interface CurrentAcademicYearResponse {
   err: number;
   message: string;
   data: {
