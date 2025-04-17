@@ -2,7 +2,7 @@
 
 import {
   AcademicYearResponse,
-  getCurrentAcademicYearResponse,
+  CurrentAcademicYearResponse
 } from "@/types/academic-year";
 import { serverFetch } from "./serverFetch";
 import { AcademicYearType } from "@/schemas/academicYearFormSchema";
@@ -12,7 +12,7 @@ export async function getAllAcademicYears() {
   return response;
 }
 export async function getCurrentAcademicYear() {
-  const response: getCurrentAcademicYearResponse = await serverFetch(
+  const response: CurrentAcademicYearResponse = await serverFetch(
     "api/admin/masterSetting"
   );
   return response;
