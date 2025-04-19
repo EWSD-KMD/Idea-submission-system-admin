@@ -5,6 +5,7 @@ import { DataTable } from "@/components/core/DataTable"
 import type { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import { Idea, IdeaResponse } from "@/types/idea"
+import { usePermission } from "@/hooks/use-permissions"
 
 type IdeaTableProps = {
   ideas: IdeaResponse,
@@ -13,32 +14,15 @@ type IdeaTableProps = {
 export default function IdeaTable({
   ideas
 }: IdeaTableProps) {
-  // const { canCreate, canUpdate, canDelete } = usePermission()
+  const { canExport } = usePermission()
   const [search, setSearch] = useState("")
-  // const [open, setOpen] = useState(false)
-  // const [selectedIdea, setSelectedIdea] = useState<Idea | null>(null)
-
-  // const handleView = (idea: Idea) => {
-  //   setSelectedIdea(idea)
-  //   setOpen(true)
-  // }
 
   const handleExport = () => {
     console.log('export')
   }
 
-  // const actions = [
-  //   // {
-  //   //   label: "View",
-  //   //   onClick: handleView,
-  //   // },
-  // ]
 
   const columns: ColumnDef<Idea>[] = [
-    {
-      accessorKey: "id",
-      header: "Id",
-    },
     {
       accessorKey: "title",
       header: "Title",
@@ -46,7 +30,51 @@ export default function IdeaTable({
     {
       accessorKey: "description",
       header: "Description",
-    }
+    },
+    {
+      accessorKey: "likes",
+      header: "Likes",
+    },
+    {
+      accessorKey: "dislikes",
+      header: "Dislikes",
+    },
+    {
+      accessorKey: "views",
+      header: "Views",
+    },
+    {
+      accessorKey: "category",
+      header: "Category",
+      cell: ({ row }) => {
+        const idea = row.original
+        return idea.category.name
+      },
+    },
+    {
+      accessorKey: "department",
+      header: "Department",
+      cell: ({ row }) => {
+        const idea = row.original
+        return idea.department.name
+      },
+    },
+    {
+      accessorKey: "academicYear",
+      header: "Academic Year",
+      cell: ({ row }) => {
+        const idea = row.original
+        return idea.academicYear.year
+      },
+    },
+    {
+      accessorKey: "user",
+      header: "User",
+      cell: ({ row }) => {
+        const idea = row.original
+        return idea.user.name
+      },
+    },
   ]
 
   return (
@@ -62,7 +90,10 @@ export default function IdeaTable({
           }}
         />
 
-        <Button onClick={handleExport}>Export Ideas</Button>
+        {
+          canExport("Idea") && 
+          <Button onClick={handleExport}>Export Ideas</Button>
+        }
       </div>
 
       <DataTable data={ideas?.data?.ideas || []} total={ideas?.data?.total || 0} columns={columns} />

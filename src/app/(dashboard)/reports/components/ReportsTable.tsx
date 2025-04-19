@@ -8,12 +8,15 @@ import type { Report, ReportResponse } from "@/types/report"
 import { disableOrEnableUser, fullyDisableOrEnableUser } from "@/services/report"
 import { toast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
+import { usePermission } from "@/hooks/use-permissions"
 
 type ReportTableProps = {
   reports: ReportResponse
 }
 
 export default function ReportTable({ reports }: ReportTableProps) {
+
+  const { canDisable, canFullyDisable } = usePermission()
   const [search, setSearch] = useState("")
   const router = useRouter()
 
@@ -74,18 +77,26 @@ export default function ReportTable({ reports }: ReportTableProps) {
 
   const getActions = (report: Report) => {
     const isDisabled = report.user.disabledInd
-
-    return [
-      {
+  
+    const actions = []
+  
+    if (canDisable("Report")) {
+      actions.push({
         label: isDisabled ? "Enable User" : "Disable User",
-        onClick: handleDisableUser,
-      },
-      {
+        onClick: () => handleDisableUser(report),
+      })
+    }
+  
+    if (canFullyDisable("Report")) {
+      actions.push({
         label: isDisabled ? "Enable User" : "Fully Disable User",
-        onClick: handleFullyDisableUser,
-      },
-    ]
+        onClick: () => handleFullyDisableUser(report),
+      })
+    }
+  
+    return actions
   }
+  
 
   const columns: ColumnDef<Report>[] = [
     {
