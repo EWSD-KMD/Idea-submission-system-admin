@@ -1,0 +1,6 @@
+@url = https://idea-submission-system-backend-production.up.railway.app/api
+
+###
+GET {{url}}/ideas
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwidXNlcklkIjo3LCJ0eXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNzQ1MDQwMTg3LCJleHAiOjE3NDUwNDA3ODd9.4Wb_ZsDqIhjEp-iTQAfIN15vayBmpdKzVR2RWDpSDo4
+Content-Type: application/json
