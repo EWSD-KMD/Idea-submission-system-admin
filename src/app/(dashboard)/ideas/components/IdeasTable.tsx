@@ -6,6 +6,8 @@ import type { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import { Idea, IdeaResponse } from "@/types/idea"
 import { usePermission } from "@/hooks/use-permissions"
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
+
 
 type IdeaTableProps = {
   ideas: IdeaResponse,
@@ -17,10 +19,15 @@ export default function IdeaTable({
   const { canExport } = usePermission()
   const [search, setSearch] = useState("")
 
-  const handleExport = () => {
-    console.log('export')
-  }
 
+  const handleExport = () => {
+    const url = `${BASE_URL}/api/admin/idea/export`;
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ideas_export.zip';
+    a.click();
+  };
 
   const columns: ColumnDef<Idea>[] = [
     {
@@ -92,17 +99,27 @@ export default function IdeaTable({
 
         {
           canExport("Idea") && 
-          <Button onClick={handleExport}>Export Ideas</Button>
+          <Button 
+        onClick={handleExport} 
+        // disabled={isExporting}
+      >
+        {/* {isExporting ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Exporting...
+          </>
+        ) : (
+          "Export Ideas"
+        )} */}
+        export idea
+      </Button>
         }
       </div>
 
-      <DataTable data={ideas?.data?.ideas || []} total={ideas?.data?.total || 0} columns={columns} />
-{/* 
-      <MenuFormDIalog
-        open={open}
-        setOpen={setOpen}
-        data={selectedMenu}
-      /> */}
+      <DataTable 
+        data={ideas?.data?.ideas || []} 
+        total={ideas?.data?.total || 0} columns={columns} 
+      />
     </div>
   )
 }
