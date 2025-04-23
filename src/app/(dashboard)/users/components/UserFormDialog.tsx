@@ -35,7 +35,7 @@ type FormValues = {
   email: string
   name: string
   password?: string
-  roleId: number
+  roleId?: number
   departmentId: number
   type: string
 }
