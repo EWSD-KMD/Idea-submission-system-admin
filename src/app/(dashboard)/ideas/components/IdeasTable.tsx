@@ -100,19 +100,10 @@ export default function IdeaTable({
         {
           canExport("Idea") && 
           <Button 
-        onClick={handleExport} 
-        // disabled={isExporting}
-      >
-        {/* {isExporting ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Exporting...
-          </>
-        ) : (
-          "Export Ideas"
-        )} */}
-        export idea
-      </Button>
+            onClick={handleExport} 
+          >
+            Export Ideas
+         </Button>
         }
       </div>
 
