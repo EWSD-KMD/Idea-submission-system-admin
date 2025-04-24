@@ -21,7 +21,7 @@ export default function ReportTable({ reports }: ReportTableProps) {
   const router = useRouter()
 
   const handleDisableUser = async (report: Report) => {
-    const currentStatus = report.user.disabledInd
+    const currentStatus = report.idea.user.disabledInd
     const data = {
       disabledInd: !currentStatus,
     }
@@ -76,7 +76,7 @@ export default function ReportTable({ reports }: ReportTableProps) {
   }
 
   const getActions = (report: Report) => {
-    const isDisabled = report.user.disabledInd
+    const isDisabled = report.idea.user.disabledInd
   
     const actions = []
   
@@ -87,9 +87,9 @@ export default function ReportTable({ reports }: ReportTableProps) {
       })
     }
   
-    if (canFullyDisable("Report")) {
+    if (canFullyDisable("Report") && (isDisabled === false)) {
       actions.push({
-        label: isDisabled ? "Enable User" : "Fully Disable User",
+        label: "Fully Disable User",
         onClick: () => handleFullyDisableUser(report),
       })
     }
@@ -100,8 +100,16 @@ export default function ReportTable({ reports }: ReportTableProps) {
 
   const columns: ColumnDef<Report>[] = [
     {
+      accessorKey: "idea.user",
+      header: "Idea Owner",
+      cell: ({ row }) => {
+        const report = row.original
+        return report.idea.user.name
+      },
+    },
+    {
       accessorKey: "user",
-      header: "User",
+      header: "Reported By",
       cell: ({ row }) => {
         const report = row.original
         return report.user.name
@@ -121,6 +129,14 @@ export default function ReportTable({ reports }: ReportTableProps) {
       cell: ({ row }) => {
         const report = row.original
         return report.idea.description
+      },
+    },
+    {
+      accessorKey: "isDisabled",
+      header: "IsDisabled",
+      cell: ({ row }) => {
+        const report = row.original
+        return report.idea.user.disabledInd?.toString()
       },
     },
     {
