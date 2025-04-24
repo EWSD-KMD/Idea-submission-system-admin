@@ -14,24 +14,19 @@ type PermissionAction =
   | "ENABLE"
 
 export function usePermission() {
-  // Only extract what we need from useAuth
   const { hasPermission, profileLoading } = useAuth()
   
-  // Use ref to store the latest hasPermission function
   const hasPermissionRef = useRef(hasPermission)
   hasPermissionRef.current = hasPermission
 
-  // Use ref for loading state to avoid dependency in can function
   const loadingRef = useRef(profileLoading)
   loadingRef.current = profileLoading
 
-  // Stable can function that doesn't change between renders
   const can = useCallback((action: PermissionAction | string, menuName: string) => {
     if (loadingRef.current) return false
     return hasPermissionRef.current(menuName, action)
-  }, []) // No dependencies - uses refs instead
+  }, []) 
 
-  // Create stable permission methods
   const permissionMethods = useMemo(() => {
     const methods = {
       can,

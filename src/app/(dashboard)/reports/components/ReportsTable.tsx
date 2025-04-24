@@ -4,42 +4,37 @@ import { useState } from "react"
 import { DataTable } from "@/components/core/DataTable"
 import ActionsDropdown from "@/components/core/DropDownAction"
 import type { ColumnDef } from "@tanstack/react-table"
-import { Report, ReportResponse } from "@/types/report"
-import { disableOrEnableUser } from "@/services/report"
+import type { Report, ReportResponse } from "@/types/report"
+import { disableOrEnableUser, fullyDisableOrEnableUser } from "@/services/report"
 import { toast } from "@/hooks/use-toast"
+import { useRouter } from "next/navigation"
+import { usePermission } from "@/hooks/use-permissions"
 
 type ReportTableProps = {
-  reports: ReportResponse,
+  reports: ReportResponse
 }
 
-export default function ReportTable({
-  reports
-}: ReportTableProps) {
+export default function ReportTable({ reports }: ReportTableProps) {
+
+  const { canDisable, canFullyDisable } = usePermission()
   const [search, setSearch] = useState("")
-  const [isDisable, setIsDisable] = useState(false)
-  const [isFullyDisable, setIsFullyDisable] = useState(false)
-  // const [open, setOpen] = useState(false)
-  // const [selectedReport, setSelectedReport] = useState<Report | null>(null)
+  const router = useRouter()
 
-  // const handleView = (report: Report) => {
-  //   setSelectedReport(report)
-  //   setOpen(true)
-  // }
-
-  const handleDisableUser = async(report: Report) => {
+  const handleDisableUser = async (report: Report) => {
+    const currentStatus = report.user.disabledInd
     const data = {
-      disabledInd: isDisable ? false : true
+      disabledInd: !currentStatus,
     }
 
     try {
-      const response = await disableOrEnableUser(report.userId, data)
+      const response = await disableOrEnableUser(report.idea.userId, data)
 
       if (response.message === "success") {
         toast({
           title: "Success",
-          description: response.data.message || "User disabled successfully"
+          description: currentStatus ? "User enabled successfully" : "User disabled successfully",
         })
-        setIsDisable(true)
+        router .refresh()
       } else {
         throw new Error(response.message || "Operation failed")
       }
@@ -49,24 +44,25 @@ export default function ReportTable({
         description: error instanceof Error ? error.message : "Failed to process",
         variant: "destructive",
       })
-    } 
+    }
   }
 
-  const handleFullyDisableUser  = async(report: Report) => {
-
+  const handleFullyDisableUser = async (report: Report) => {
+    const currentStatus = report.user.disabledInd
     const data = {
-      disabledInd: isFullyDisable ? false : true
+      disabledInd: !currentStatus,
     }
 
     try {
-      const response = await disableOrEnableUser(report.userId, data)
+      const response = await fullyDisableOrEnableUser(report.idea.userId, data)
 
       if (response.message === "success") {
         toast({
           title: "Success",
-          description: response.data.message || "User fully disabled successfully"
+          description: currentStatus ? "User fully enabled successfully" : "User fully disabled successfully",
         })
-        setIsFullyDisable(true)
+
+        router.refresh()
       } else {
         throw new Error(response.message || "Operation failed")
       }
@@ -76,51 +72,63 @@ export default function ReportTable({
         description: error instanceof Error ? error.message : "Failed to process",
         variant: "destructive",
       })
-    } 
+    }
   }
 
-  const actions = [
-    // {
-    //   label: "View",
-    //   onClick: handleView,
-    // },
-    {
-      label: isDisable ? "Enable User" : "Disable User",
-      onClick: handleDisableUser,
-    },
-    {
-      label: isFullyDisable ? "Enable User" : "Fully Disable User",
-      onClick: handleFullyDisableUser,
+  const getActions = (report: Report) => {
+    const isDisabled = report.user.disabledInd
+  
+    const actions = []
+  
+    if (canDisable("Report")) {
+      actions.push({
+        label: isDisabled ? "Enable User" : "Disable User",
+        onClick: () => handleDisableUser(report),
+      })
     }
-  ]
+  
+    if (canFullyDisable("Report")) {
+      actions.push({
+        label: isDisabled ? "Enable User" : "Fully Disable User",
+        onClick: () => handleFullyDisableUser(report),
+      })
+    }
+  
+    return actions
+  }
+  
 
   const columns: ColumnDef<Report>[] = [
     {
-      accessorKey: "id",
-      header: "Id",
-    },
-    {
       accessorKey: "user",
       header: "User",
+      cell: ({ row }) => {
+        const report = row.original
+        return report.user.name
+      },
     },
     {
-      accessorKey: "idea",
-      header: "Idea",
+      accessorKey: "idea.title",
+      header: "Idea Title",
+      cell: ({ row }) => {
+        const report = row.original
+        return report.idea.title
+      },
     },
     {
-      accessorKey: "type",
-      header: "Type",
-    },
-    {
-      accessorKey: "detail",
-      header: "Detail",
+      accessorKey: "idea.description",
+      header: "Idea Description",
+      cell: ({ row }) => {
+        const report = row.original
+        return report.idea.description
+      },
     },
     {
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
-        const menu = row.original
-        return <ActionsDropdown actions={actions} data={menu} />
+        const report = row.original
+        return <ActionsDropdown actions={getActions(report)} data={report} />
       },
       enableHiding: false,
     },
@@ -138,12 +146,9 @@ export default function ReportTable({
             setSearch(e.target.value)
           }}
         />
-
       </div>
 
       <DataTable data={reports?.data?.data || []} total={reports?.data?.total || 0} columns={columns} />
-
     </div>
   )
 }
-

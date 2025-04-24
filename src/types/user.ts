@@ -6,6 +6,7 @@ export interface User {
   roleId: number;
   departmentId: number;
   type: string;
+  disabledInd ?: boolean;
 }
 
 export interface UserResponse {
