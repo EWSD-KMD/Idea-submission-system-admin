@@ -5,7 +5,7 @@ import { serverFetch } from "./serverFetch";
 type UserType = {
   email: string;
   name: string;
-  roleId: number;
+  roleId?: number;
   departmentId: number;
   type: string;
   password?: string;
