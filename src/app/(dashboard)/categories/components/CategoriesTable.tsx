@@ -36,14 +36,27 @@ export default function CategoryTable({ categories }: CategoryTableProps) {
   };
 
   const handleDelete = async (data: Category) => {
-    const response = await deleteCategory(data.id);
+    try {
+      const response = await deleteCategory(data.id);
 
-    if (response.message === "success") {
+      if (response.message === "success") {
+        toast({
+          title: "Success",
+          description: "Category deleted successfully",
+        });
+        router.refresh();
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Cannot delete category";
+
       toast({
-        title: "Success",
-        description: "Category deleted successfully",
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
       });
-      router.refresh();
     }
   };
 
