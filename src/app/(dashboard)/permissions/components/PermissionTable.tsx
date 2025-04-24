@@ -1,35 +1,51 @@
-"use client"
-import { Input } from "@/components/ui/input"
-import { useState } from "react"
-import { DataTable } from "@/components/core/DataTable"
-import ActionsDropdown from "@/components/core/DropDownAction"
-import type { ColumnDef } from "@tanstack/react-table"
-import { Button } from "@/components/ui/button"
-import { Permission, PermissionResponse } from "@/types/permission"
-import { PermissionFormDialog } from "./PermissionFormDialog"
-import { MenuResponse } from "@/types/menu"
+"use client";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { DataTable } from "@/components/core/DataTable";
+import ActionsDropdown from "@/components/core/DropDownAction";
+import type { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
+import { Permission, PermissionResponse } from "@/types/permission";
+import { PermissionFormDialog } from "./PermissionFormDialog";
+import { MenuResponse } from "@/types/menu";
+import { deletePermission } from "@/services/permission";
+import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 type PermissionTableProps = {
-  permissions: PermissionResponse,
-  menus: MenuResponse
-}
+  permissions: PermissionResponse;
+  menus: MenuResponse;
+};
 export default function PermissionTable({
   permissions,
-  menus
+  menus,
 }: PermissionTableProps) {
-  const [search, setSearch] = useState("")
-  const [open, setOpen] = useState(false)
-  const [selectedPermission, setSelectedPermission] = useState<Permission | null>(null)
+  const router = useRouter();
+  const [search, setSearch] = useState("");
+  const [open, setOpen] = useState(false);
+  const [selectedPermission, setSelectedPermission] =
+    useState<Permission | null>(null);
 
   const handleEdit = (role: Permission) => {
-    setSelectedPermission(role)
-    setOpen(true)
-  }
+    setSelectedPermission(role);
+    setOpen(true);
+  };
 
   const handleCreate = () => {
-    setSelectedPermission(null)
-    setOpen(true)
-  }
+    setSelectedPermission(null);
+    setOpen(true);
+  };
+
+  const handleDelete = async (data: Permission) => {
+    const response = await deletePermission(data.id);
+    if (response.message === "success") {
+      toast({
+        title: "Success",
+        description: "Permission deleted successfully",
+      });
+      router.refresh();
+    }
+  };
 
   const actions = [
     {
@@ -38,9 +54,9 @@ export default function PermissionTable({
     },
     {
       label: "Delete",
-      onClick: (permission: Permission) => console.log("Delete permission", permission),
+      onClick: handleDelete,
     },
-  ]
+  ];
 
   const columns: ColumnDef<Permission>[] = [
     {
@@ -55,19 +71,19 @@ export default function PermissionTable({
       accessorKey: "menu",
       header: "Menu",
       cell: ({ row }) => {
-       return row.original.menu.name
+        return row.original.menu.name;
       },
     },
     {
       accessorKey: "actions",
       header: "Actions",
       cell: ({ row }) => {
-        const role = row.original
-        return <ActionsDropdown actions={actions} data={role} />
+        const role = row.original;
+        return <ActionsDropdown actions={actions} data={role} />;
       },
       enableHiding: false,
     },
-  ]
+  ];
 
   return (
     <div className="flex flex-col gap-8 p-4">
@@ -78,14 +94,18 @@ export default function PermissionTable({
           className="w-80"
           value={search}
           onChange={(e) => {
-            setSearch(e.target.value)
+            setSearch(e.target.value);
           }}
         />
 
         <Button onClick={handleCreate}>Create Permission</Button>
       </div>
 
-      <DataTable data={permissions?.data || []} total={permissions?.total || 0} columns={columns} />
+      <DataTable
+        data={permissions?.data || []}
+        total={permissions?.total || 0}
+        columns={columns}
+      />
 
       <PermissionFormDialog
         open={open}
@@ -94,6 +114,5 @@ export default function PermissionTable({
         menus={menus?.data}
       />
     </div>
-  )
+  );
 }
-

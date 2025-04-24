@@ -1,41 +1,19 @@
 "use server";
 
-import { getAllIdeas } from "@/services/idea";
+import { ReportChartResponse } from "@/types/reports-chart";
 import BrowserUsage from "./components/BrowserUsage";
 import CategoryStatistics from "./components/CategoryStatistics";
 import DepartmentStatistics from "./components/DepartmentStatistics";
 import KeyMetrics from "./components/KeyMetrics";
 import PopularIdeas from "./components/PopularIdeas";
-import { getAllUsers } from "@/services/user";
-import { getAllDepartments } from "@/services/department";
-import { getAllCategories } from "@/services/category";
+import { getReportChartData } from "@/services/report-chart";
 
 export default async function ReportsPage() {
-  const [totalIdeas, totalUsers, departments, categories] = await Promise.all([
-    getAllIdeas(),
-    getAllUsers(),
-    getAllDepartments(),
-    getAllCategories(),
-  ]);
+  const response = (await getReportChartData()) as ReportChartResponse;
+  console.log("response", response);
 
-  const departmentStats = departments.data?.departments.map((dept) => ({
-    name: dept.name,
-    ideas: dept._count.ideas,
-  }));
-
-  console.log("departmentStats", await getAllDepartments());
-
-  const categoryStats = categories.data?.categories.map((cat) => ({
-    name: cat.name,
-    ideas: cat._count.ideas,
-  }));
-
-  console.log("totalIdeas", totalIdeas);
-
-  const metrics = {
-    totalIdeas: totalIdeas?.data?.total,
-    totalUsers: totalUsers?.data?.total,
-  };
+  const { overview, departmentStats, categoryStats, popularIdeas } =
+    response.data;
 
   return (
     <div className="space-y-6 p-6">
@@ -50,17 +28,29 @@ export default async function ReportsPage() {
 
       <div className="space-y-6">
         <KeyMetrics
-          totalIdeas={metrics.totalIdeas}
-          totalUsers={metrics.totalUsers}
+          totalIdeas={overview.totalIdeas}
+          interactions={overview.interactions}
+          totalComments={overview.totalComments}
+          activeUsers={overview.activeUsers}
         />
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <DepartmentStatistics data={departmentStats} />
-          <CategoryStatistics data={categoryStats} />
+          <DepartmentStatistics
+            data={departmentStats.map((dept) => ({
+              name: dept.name,
+              ideas: dept.totalPosts,
+            }))}
+          />
+          <CategoryStatistics
+            data={categoryStats.map((cat) => ({
+              name: cat.name,
+              ideas: cat.totalPosts,
+            }))}
+          />
           <BrowserUsage />
         </div>
 
-        <PopularIdeas />
+        <PopularIdeas popularIdeas={popularIdeas} />
       </div>
     </div>
   );

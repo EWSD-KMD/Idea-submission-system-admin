@@ -44,3 +44,10 @@ export async function updateAcademicYear(id: number, data: AcademicYearType) {
   });
   return response;
 }
+
+export async function deleteAcademicYear(id: number) {
+  const response = await serverFetch(`api/academicYears/${id}`, {
+    method: "DELETE",
+  });
+  return response;
+}

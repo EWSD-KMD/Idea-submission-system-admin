@@ -14,40 +14,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { format } from "date-fns";
+import { PopularIdeaProps } from "@/types/reports-chart";
 
-interface Idea {
-  title: string;
-  department: string;
-  votes: number;
-  views: number;
-  date: string;
-}
-
-export default function PopularIdeas() {
+export default function PopularIdeas({ popularIdeas }: PopularIdeaProps) {
   const currentDate = format(new Date(), "dd MMMM,yyyy");
-  const ideas: Idea[] = [
-    {
-      title: "Improve Customer Service",
-      department: "Sales",
-      votes: 45,
-      views: 230,
-      date: "2023-10-01",
-    },
-    {
-      title: "New Marketing Strategy",
-      department: "Marketing",
-      votes: 30,
-      views: 150,
-      date: "2023-10-02",
-    },
-    {
-      title: "Enhance Product Features",
-      department: "Product",
-      votes: 25,
-      views: 120,
-      date: "2023-10-03",
-    },
-  ];
 
   return (
     <>
@@ -72,13 +42,15 @@ export default function PopularIdeas() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {ideas.map((idea) => (
-                <TableRow key={idea.title}>
+              {popularIdeas.map((idea) => (
+                <TableRow key={idea.date}>
                   <TableCell className="font-medium">{idea.title}</TableCell>
                   <TableCell>{idea.department}</TableCell>
                   <TableCell>{idea.votes}</TableCell>
                   <TableCell>{idea.views}</TableCell>
-                  <TableCell>{idea.date}</TableCell>
+                  <TableCell>
+                    {format(new Date(idea.date), "MMM d, yyyy")}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
