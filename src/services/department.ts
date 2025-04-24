@@ -1,11 +1,11 @@
-"use server"
+"use server";
 import { DepartmentResponse } from "@/types/department";
 import { serverFetch } from "./serverFetch";
 import { DepartmentType } from "@/schemas/departmentFormSchema";
 
 export async function getAllDepartments() {
   const response: DepartmentResponse = await serverFetch("api/departments");
-  return response
+  return response;
 }
 
 export async function createDepartment(data: DepartmentType) {
@@ -13,7 +13,7 @@ export async function createDepartment(data: DepartmentType) {
     method: "POST",
     body: JSON.stringify(data),
   });
-  return response
+  return response;
 }
 
 export async function updateDepartment(id: number, data: DepartmentType) {
@@ -21,5 +21,12 @@ export async function updateDepartment(id: number, data: DepartmentType) {
     method: "PUT",
     body: JSON.stringify(data),
   });
-  return response
+  return response;
+}
+
+export async function deleteDepartment(id: number) {
+  const response = await serverFetch(`api/departments/${id}`, {
+    method: "DELETE",
+  });
+  return response;
 }

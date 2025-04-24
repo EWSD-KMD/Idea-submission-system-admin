@@ -1,19 +1,18 @@
-"use server"
+"use server";
 import { PermissionType } from "@/schemas/permissionFormSchema";
 import { serverFetch } from "./serverFetch";
 import { PermissionResponse } from "@/types/permission";
 
 export async function getAllPermissions() {
   const response: PermissionResponse = await serverFetch("api/permissions");
-  return response
-  
+  return response;
 }
 export async function createPermission(data: PermissionType) {
   const response = await serverFetch("api/permissions", {
     method: "POST",
     body: JSON.stringify(data),
   });
-  return response
+  return response;
 }
 
 export async function updatePermission(id: number, data: PermissionType) {
@@ -21,5 +20,12 @@ export async function updatePermission(id: number, data: PermissionType) {
     method: "PUT",
     body: JSON.stringify(data),
   });
-  return response
+  return response;
+}
+
+export async function deletePermission(id: number) {
+  const response = await serverFetch(`api/permissions/${id}`, {
+    method: "DELETE",
+  });
+  return response;
 }

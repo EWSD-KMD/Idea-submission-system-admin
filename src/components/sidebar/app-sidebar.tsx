@@ -22,6 +22,7 @@ import {
   Lightbulb,
   LucideIcon,
   Home,
+  ChartNoAxesCombined,
 } from "lucide-react";
 import { useAuth } from "../core/AuthProvider";
 
@@ -37,7 +38,7 @@ const menuToRouteMap: Record<string, { route: string; icon: LucideIcon }> = {
   Settings: { route: "/settings", icon: Settings },
   Report: { route: "/reports", icon: FileText },
   Idea: { route: "/ideas", icon: Lightbulb },
-  ReportChart: { route: "/reports-chart", icon: Lightbulb },
+  ReportChart: { route: "/reports-chart", icon: ChartNoAxesCombined },
 };
 
 const defaultIcon = Home;
