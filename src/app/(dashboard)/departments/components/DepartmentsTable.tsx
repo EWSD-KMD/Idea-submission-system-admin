@@ -35,13 +35,29 @@ export default function DepartmentTable({ departments }: DepartmentTableProps) {
   };
 
   const handleDelete = async (data: Department) => {
-    const response = await deleteDepartment(data.id);
-    if (response.message === "success") {
+    try {
+      const response = await deleteDepartment(data.id);
+
+      if (response.message === "success") {
+        toast({
+          title: "Success",
+          description: "Department deleted successfully",
+        });
+        router.refresh();
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Cannot delete department with associated ideas";
+
       toast({
-        title: "Success",
-        description: "Department deleted successfully",
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
       });
-      router.refresh();
     }
   };
 
