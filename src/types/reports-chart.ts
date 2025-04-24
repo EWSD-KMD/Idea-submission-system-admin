@@ -1,3 +1,34 @@
+export interface ReportChartResponse {
+  data: {
+    overview: Overview;
+    departmentStats: DepartmentStat[];
+    categoryStats: CategoryStat[];
+    popularIdeas: PopularIdea[];
+  };
+  err: number;
+  message: string;
+}
+
+export interface Overview {
+  totalIdeas: number;
+  interactions: {
+    likes: number;
+    dislikes: number;
+  };
+  totalComments: number;
+  activeUsers: number;
+}
+
+export interface DepartmentStat {
+  name: string;
+  totalPosts: number;
+}
+
+export interface CategoryStat {
+  name: string;
+  totalPosts: number;
+}
+
 export interface StatsProps {
   data: {
     name: string;
@@ -5,6 +36,14 @@ export interface StatsProps {
   }[];
 }
 
-export interface ItemWithIdeas {
-  ideas: number;
+export interface PopularIdea {
+  title: string;
+  department: string;
+  votes: number;
+  views: number;
+  date: string;
+}
+
+export interface PopularIdeaProps {
+  popularIdeas: PopularIdea[];
 }
