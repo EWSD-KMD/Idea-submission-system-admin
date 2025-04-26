@@ -60,13 +60,6 @@ export default function UserTable({
       });
     }
 
-    if (canUpdate("Admin")) {
-      permittedActions.push({
-        label: "Reset Password",
-        onClick: (user: User) => console.log("Reset password for", user),
-      });
-    }
-
     if (canDelete("Admin")) {
       permittedActions.push({
         label: "Delete",
