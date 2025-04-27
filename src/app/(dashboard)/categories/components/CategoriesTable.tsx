@@ -113,7 +113,7 @@ export default function CategoryTable({ categories }: CategoryTableProps) {
           }}
         />
 
-        {canCreate("Category") && (
+        {canCreate("Categories") && (
           <Button onClick={handleCreate}>Add Category</Button>
         )}
       </div>
