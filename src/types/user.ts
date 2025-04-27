@@ -7,6 +7,8 @@ export interface User {
   departmentId: number;
   type: string;
   disabledInd ?: boolean;
+  fullyDisabledInd ?: boolean;
+ 
 }
 
 export interface UserResponse {
