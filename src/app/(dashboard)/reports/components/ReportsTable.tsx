@@ -48,7 +48,8 @@ export default function ReportTable({ reports }: ReportTableProps) {
   }
 
   const handleFullyDisableUser = async (report: Report) => {
-    const currentStatus = report.user.disabledInd
+    const currentStatus = report.idea.user.fullyDisabledInd
+ 
     const data = {
       disabledInd: !currentStatus,
     }
@@ -77,6 +78,7 @@ export default function ReportTable({ reports }: ReportTableProps) {
 
   const getActions = (report: Report) => {
     const isDisabled = report.idea.user.disabledInd
+    const isFullyDisabled = report.idea.user.fullyDisabledInd
   
     const actions = []
   
@@ -87,9 +89,9 @@ export default function ReportTable({ reports }: ReportTableProps) {
       })
     }
   
-    if (canFullyDisable("Report") && (isDisabled === false)) {
+    if (canFullyDisable("Report")) {
       actions.push({
-        label: "Fully Disable User",
+        label: isFullyDisabled ? "Fully Enable User": "Fully Disable User",
         onClick: () => handleFullyDisableUser(report),
       })
     }
@@ -137,6 +139,14 @@ export default function ReportTable({ reports }: ReportTableProps) {
       cell: ({ row }) => {
         const report = row.original
         return report.idea.user.disabledInd?.toString()
+      },
+    },
+    {
+      accessorKey: "isFullyDisabled",
+      header: "isFullyDisabled",
+      cell: ({ row }) => {
+        const report = row.original
+        return report.idea.user.fullyDisabledInd?.toString()
       },
     },
     {

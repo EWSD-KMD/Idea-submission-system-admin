@@ -63,14 +63,14 @@ export default function CategoryTable({ categories }: CategoryTableProps) {
   const actions = useMemo(() => {
     const permittedActions = [];
 
-    if (canUpdate("Category")) {
+    if (canUpdate("Categories")) {
       permittedActions.push({
         label: "Edit",
         onClick: handleEdit,
       });
     }
 
-    if (canDelete("Category")) {
+    if (canDelete("Categories")) {
       permittedActions.push({
         label: "Delete",
         onClick: handleDelete,
@@ -113,7 +113,7 @@ export default function CategoryTable({ categories }: CategoryTableProps) {
           }}
         />
 
-        {canCreate("Category") && (
+        {canCreate("Categories") && (
           <Button onClick={handleCreate}>Add Category</Button>
         )}
       </div>
