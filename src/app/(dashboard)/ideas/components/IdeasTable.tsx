@@ -86,7 +86,7 @@ export default function IdeaTable({
 
   return (
     <div className="flex flex-col gap-8 p-4">
-      <div className="flex flex-row gap-2 justify-between">
+      <div className="flex flex-row gap-2 justify-end">
         <Input
           type="text"
           placeholder="Search ..."

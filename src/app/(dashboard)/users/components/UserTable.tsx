@@ -107,16 +107,7 @@ export default function UserTable({
 
   return (
     <div className="flex flex-col gap-8 p-4">
-      <div className="flex flex-row gap-2 justify-between">
-        <Input
-          type="text"
-          placeholder="Search ..."
-          className="w-80"
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-          }}
-        />
+      <div className="flex flex-row gap-2 justify-end">
 
         {canCreate("Admin") && (
           <Button onClick={handleCreate}>Create User</Button>

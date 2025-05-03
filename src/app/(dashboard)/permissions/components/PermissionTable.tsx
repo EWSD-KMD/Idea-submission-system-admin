@@ -1,5 +1,4 @@
 "use client";
-import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { DataTable } from "@/components/core/DataTable";
 import ActionsDropdown from "@/components/core/DropDownAction";
@@ -21,7 +20,6 @@ export default function PermissionTable({
   menus,
 }: PermissionTableProps) {
   const router = useRouter();
-  const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [selectedPermission, setSelectedPermission] =
     useState<Permission | null>(null);
@@ -87,16 +85,7 @@ export default function PermissionTable({
 
   return (
     <div className="flex flex-col gap-8 p-4">
-      <div className="flex flex-row gap-2 justify-between">
-        <Input
-          type="text"
-          placeholder="Search ..."
-          className="w-80"
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-          }}
-        />
+      <div className="flex flex-row gap-2 justify-end">
 
         <Button onClick={handleCreate}>Create Permission</Button>
       </div>
