@@ -1,6 +1,5 @@
 "use client"
-import { Input } from "@/components/ui/input"
-import { useState } from "react"
+
 import { DataTable } from "@/components/core/DataTable"
 import ActionsDropdown from "@/components/core/DropDownAction"
 import type { ColumnDef } from "@tanstack/react-table"
@@ -17,7 +16,6 @@ type ReportTableProps = {
 export default function ReportTable({ reports }: ReportTableProps) {
 
   const { canDisable, canFullyDisable } = usePermission()
-  const [search, setSearch] = useState("")
   const router = useRouter()
 
   const handleDisableUser = async (report: Report) => {

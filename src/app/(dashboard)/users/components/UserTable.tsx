@@ -1,5 +1,4 @@
 "use client";
-import { Input } from "@/components/ui/input";
 import { useMemo, useState } from "react";
 import { DataTable } from "@/components/core/DataTable";
 import ActionsDropdown from "@/components/core/DropDownAction";
@@ -25,7 +24,6 @@ export default function UserTable({
 }) {
   const router = useRouter();
   const { canCreate, canUpdate, canDelete } = usePermission();
-  const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
