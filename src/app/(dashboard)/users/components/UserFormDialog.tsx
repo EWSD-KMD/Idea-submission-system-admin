@@ -55,7 +55,7 @@ const defaultValueForEdit = (data: User) => {
   return {
     email: data?.email || "",
     name: data?.name || "",
-    roleId: data?.roleId || 0,
+    roleId: data?.roleId || undefined,
     departmentId: data?.departmentId || 0,
     type: data?.type || "",
   }
@@ -87,6 +87,8 @@ export function UserFormDialog({ open, setOpen, departments, roles, data }: User
 
   const onSubmit = async (values: FormValues) => {
     setIsLoading(true)
+
+    console.log("payload", values)
 
     try {
       const response = isEditMode ?

@@ -3,10 +3,10 @@ import UserTable from "./components/UserTable"
 import { getAllDepartments } from "@/services/department"
 import { getAllRoles } from "@/services/role"
 
-export default async function Page () {
+export default async function Page ({searchParams}:{searchParams: Promise<Record<string, string>>} ){
 
   const [users, departments, roles] = await Promise.all([
-    getAllUsers(),
+    getAllUsers(searchParams),
     getAllDepartments(),
     getAllRoles(),
   ])

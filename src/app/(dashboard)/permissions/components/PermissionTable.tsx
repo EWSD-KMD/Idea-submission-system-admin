@@ -103,7 +103,7 @@ export default function PermissionTable({
 
       <DataTable
         data={permissions?.data || []}
-        total={permissions?.total || 0}
+        total={permissions?.meta?.total || 0}
         columns={columns}
       />
 

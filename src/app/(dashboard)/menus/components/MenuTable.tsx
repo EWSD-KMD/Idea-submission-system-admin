@@ -91,7 +91,7 @@ export default function MenuTable({ menus }: MenuTableProps) {
 
       <DataTable
         data={menus?.data || []}
-        total={menus?.total || 0}
+        total={menus?.meta?.total || 0}
         columns={columns}
       />
 

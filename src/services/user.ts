@@ -11,8 +11,16 @@ type UserType = {
   password?: string;
 };
 
-export async function getAllUsers() {
-  const response = await serverFetch("api/users");
+export async function getAllUsers(searchParams:Promise<Record<string, string>>
+) {
+
+  const {limit , page} = await searchParams;
+
+    const perPage= limit || 10;
+    const pageNo = page || 1;
+  
+  const response = await serverFetch(`api/users?page=${pageNo}&limit=${perPage}`);
+  
 
   return response;
 }

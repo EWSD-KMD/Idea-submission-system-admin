@@ -4,8 +4,12 @@ import { serverFetch } from "./serverFetch";
 import { MenuType } from "@/schemas/menuFormSchema";
 import { MenuResponse } from "@/types/menu";
 
-export async function getAllMenus() {
-  const response: MenuResponse = await serverFetch("api/menus");
+export async function getAllMenus(searchParams:Promise<Record<string, string>>) {
+  const {limit , page} = await searchParams;
+
+  const perPage= limit || 10;
+  const pageNo = page || 1;
+  const response: MenuResponse = await serverFetch(`api/menus?page=${pageNo}&limit=${perPage}`);
   return response;
 }
 export async function createMenu(data: MenuType) {

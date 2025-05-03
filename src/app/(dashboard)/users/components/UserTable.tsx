@@ -103,6 +103,8 @@ export default function UserTable({
     },
   ];
 
+  
+
   return (
     <div className="flex flex-col gap-8 p-4">
       <div className="flex flex-row gap-2 justify-between">
@@ -122,8 +124,8 @@ export default function UserTable({
       </div>
 
       <DataTable
-        data={users?.data.data || []}
-        total={users?.total || 0}
+        data={users?.data?.data || []}
+        total={users?.data?.total  || 0}
         columns={columns}
       />
 
