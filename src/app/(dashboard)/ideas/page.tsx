@@ -1,11 +1,5 @@
-import { getAllIdeas } from "@/services/idea"
-import IdeaTable from "./components/IdeasTable"
+import IdeaTable from "./components/IdeasTable";
 
-export default async function Page () {
-
-  const ideas = await getAllIdeas()
-
-  return (
-    <IdeaTable ideas={ideas}/>
-  )
+export default async function Page() {
+  return <IdeaTable />;
 }

@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,37 +8,50 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { userFormSchema, userEditFormSchema } from "@/schemas/userFormSchema"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect, useState, type Dispatch, type SetStateAction } from "react"
-import { useForm } from "react-hook-form"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { toast } from "@/hooks/use-toast"
-import { createUser, updateUser } from "@/services/user"
-import { useRouter } from "next/navigation"
-import type { Department } from "@/types/department"
-import type { Role } from "@/types/role"
-import type { User } from "@/types/user"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { userFormSchema, userEditFormSchema } from "@/schemas/userFormSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { toast } from "@/hooks/use-toast";
+import { createUser, updateUser } from "@/services/user";
+import { useRouter } from "next/navigation";
+import type { Department } from "@/types/department";
+import type { Role } from "@/types/role";
+import type { User } from "@/types/user";
 
 interface UserFormDialogProps {
-  open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
-  departments: Department[]
-  roles: Role[]
-  data: User | null
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  departments: Department[];
+  roles: Role[];
+  data: User | null;
 }
 
 type FormValues = {
-  email: string
-  name: string
-  password?: string
-  roleId?: number
-  departmentId: number
-  type: string
-}
+  email: string;
+  name: string;
+  password?: string;
+  roleId?: number;
+  departmentId: number;
+  type: string;
+};
 
 const defaultValuesForCreate = () => {
   return {
@@ -48,71 +61,84 @@ const defaultValuesForCreate = () => {
     roleId: undefined,
     departmentId: 0,
     type: "",
-  }
-}
+  };
+};
 
 const defaultValueForEdit = (data: User) => {
+  console.log("data", data);
   return {
     email: data?.email || "",
     name: data?.name || "",
     roleId: data?.roleId || 0,
     departmentId: data?.departmentId || 0,
     type: data?.type || "",
-  }
-}
+  };
+};
 
-export function UserFormDialog({ open, setOpen, departments, roles, data }: UserFormDialogProps) {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
-  const isEditMode = !!data
+export function UserFormDialog({
+  open,
+  setOpen,
+  departments,
+  roles,
+  data,
+}: UserFormDialogProps) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const isEditMode = !!data;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(isEditMode ? userEditFormSchema : userFormSchema),
     defaultValues: isEditMode
       ? defaultValueForEdit(data)
-      : defaultValuesForCreate()
-  })
+      : defaultValuesForCreate(),
+  });
 
-  const userType = form.watch("type")
+  const userType = form.watch("type");
 
   useEffect(() => {
     if (open) {
       if (data) {
-        form.reset(defaultValueForEdit(data))
+        form.reset(defaultValueForEdit(data));
       } else {
-        form.reset(defaultValuesForCreate())
+        form.reset(defaultValuesForCreate());
       }
     }
-  }, [data, open, form])
+  }, [data, open, form]);
 
   const onSubmit = async (values: FormValues) => {
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
-      const response = isEditMode ?
-        await updateUser(data!.id, values) : await createUser(values)
+      const response = isEditMode
+        ? await updateUser(data!.id, values)
+        : await createUser(values);
 
       if (response.message === "success") {
         toast({
           title: "Success",
-          description: isEditMode ? "User updated successfully" : "User created successfully",
-        })
-        router.refresh()
-        setOpen(false)
+          description: isEditMode
+            ? "User updated successfully"
+            : "User created successfully",
+        });
+        router.refresh();
+        setOpen(false);
       } else {
-        throw new Error(response.message || "Operation failed")
+        throw new Error(response.message || "Operation failed");
       }
     } catch (error) {
-      console.error("Error submitting form:", error)
+      console.error("Error submitting form:", error);
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to process user data",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to process user data",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -120,7 +146,9 @@ export function UserFormDialog({ open, setOpen, departments, roles, data }: User
         <DialogHeader>
           <DialogTitle>{isEditMode ? "Edit User" : "Create User"}</DialogTitle>
           <DialogDescription>
-            {isEditMode ? "Update the user information below." : "Fill in the details to create a new user account."}
+            {isEditMode
+              ? "Update the user information below."
+              : "Fill in the details to create a new user account."}
           </DialogDescription>
         </DialogHeader>
 
@@ -176,7 +204,10 @@ export function UserFormDialog({ open, setOpen, departments, roles, data }: User
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>User Type</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value || undefined}>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value || undefined}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select user type" />
@@ -192,8 +223,7 @@ export function UserFormDialog({ open, setOpen, departments, roles, data }: User
               )}
             />
 
-
-            {userType === "ADMIN" &&
+            {userType === "ADMIN" && (
               <FormField
                 control={form.control}
                 name="roleId"
@@ -201,7 +231,9 @@ export function UserFormDialog({ open, setOpen, departments, roles, data }: User
                   <FormItem>
                     <FormLabel>Role</FormLabel>
                     <Select
-                      onValueChange={(value) => field.onChange(Number.parseInt(value))}
+                      onValueChange={(value) =>
+                        field.onChange(Number.parseInt(value))
+                      }
                       value={field.value ? field.value.toString() : undefined}
                     >
                       <FormControl>
@@ -221,8 +253,7 @@ export function UserFormDialog({ open, setOpen, departments, roles, data }: User
                   </FormItem>
                 )}
               />
-            }
-
+            )}
 
             <FormField
               control={form.control}
@@ -231,7 +262,9 @@ export function UserFormDialog({ open, setOpen, departments, roles, data }: User
                 <FormItem>
                   <FormLabel>Department</FormLabel>
                   <Select
-                    onValueChange={(value) => field.onChange(Number.parseInt(value))}
+                    onValueChange={(value) =>
+                      field.onChange(Number.parseInt(value))
+                    }
                     value={field.value ? field.value.toString() : undefined}
                   >
                     <FormControl>
@@ -252,16 +285,20 @@ export function UserFormDialog({ open, setOpen, departments, roles, data }: User
               )}
             />
 
-
             <DialogFooter className="pt-4">
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? (isEditMode ? "Updating..." : "Creating...") : isEditMode ? "Update" : "Create"}
+                {isLoading
+                  ? isEditMode
+                    ? "Updating..."
+                    : "Creating..."
+                  : isEditMode
+                  ? "Update"
+                  : "Create"}
               </Button>
             </DialogFooter>
           </form>
         </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-

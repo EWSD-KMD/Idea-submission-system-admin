@@ -5,7 +5,9 @@ export default async function middleware(request: NextRequest) {
   const loginPage = "/login";
   const pathname = request.nextUrl.pathname;
 
-  const rawAuthCookieValue = request.cookies.get(process.env.NEXT_PUBLIC_AUTH_COOKIE_NAME as string)?.value;
+  const rawAuthCookieValue = request.cookies.get(
+    process.env.NEXT_PUBLIC_AUTH_COOKIE_NAME as string
+  )?.value;
   const authCookieValue = decrypt(rawAuthCookieValue);
 
   const isLoggedIn = Boolean(authCookieValue.accessToken);
@@ -23,17 +25,14 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Match only internationalized pathnames
   matcher: [
-    // Enable a redirect to a matching locale at the root
+    // Root path
     "/",
 
-    // Set a cookie to remember the previous locale for
-    // all requests that have a locale prefix
+    // Locale-prefixed pages
     "/(my|en)/:path*",
 
-    // Enable redirects that add missing locales
-    // (e.g. `/pathnames` -> `/en/pathnames`)
-    "/((?!_next|_vercel|.*\\..*).*)",
+    // All other paths excluding _next, _vercel, static files, and api
+    "/((?!api|_next|_vercel|.*\\..*).*)",
   ],
 };
