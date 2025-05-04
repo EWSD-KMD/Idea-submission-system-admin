@@ -17,6 +17,7 @@ const getAuthToken = async () => {
 
   try {
     const decryptedValue = decrypt(authCookie.value);
+    console.log("decryoted", decryptedValue)
     return decryptedValue.accessToken;
   } catch (error) {
     console.error("Failed to parse auth cookie:", error);
@@ -50,6 +51,7 @@ export async function refreshAuthToken() {
     });
 
     if (!response.ok) {
+      console.log("triggerrrrrr")
       cookieStore.delete(cookieName); // Delete the cookie if refresh fails
       console.log("cooki cookieStore.getAll()", cookieStore.getAll());
       console.error("Failed to refresh token:", response.statusText);
