@@ -50,13 +50,13 @@ export async function refreshAuthToken() {
       },
     });
 
-    if (!response.ok) {
-      console.log("triggerrrrrr")
-      cookieStore.delete(cookieName); // Delete the cookie if refresh fails
-      console.log("cooki cookieStore.getAll()", cookieStore.getAll());
-      console.error("Failed to refresh token:", response.statusText);
-      return { accessToken: null };
-    }
+    // if (!response.ok) {
+    //   console.log("triggerrrrrr")
+    //   cookieStore.delete(cookieName); // Delete the cookie if refresh fails
+    //   console.log("cooki cookieStore.getAll()", cookieStore.getAll());
+    //   console.error("Failed to refresh token:", response.statusText);
+    //   return { accessToken: null };
+    // }
 
     const { data } = await response.json();
 
