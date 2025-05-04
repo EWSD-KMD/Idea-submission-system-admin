@@ -21,7 +21,7 @@ export async function getCurrentAcademicYear() {
 export async function setCurrentAcademicYear(data: {
   currentAcademicYearId: number;
 }) {
-  const response = await serverFetch(`api/admin/masterSetting/1`, {
+  const response = await serverFetch(`api/admin/masterSetting/3`, {
     method: "PUT",
     body: JSON.stringify(data),
   });
