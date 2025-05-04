@@ -4,6 +4,7 @@ export interface ReportChartResponse {
     departmentStats: DepartmentStat[];
     categoryStats: CategoryStat[];
     popularIdeas: PopularIdea[];
+    browserStats: BrowserStat[];
   };
   err: number;
   message: string;
@@ -27,6 +28,11 @@ export interface DepartmentStat {
 export interface CategoryStat {
   name: string;
   totalPosts: number;
+}
+
+export interface BrowserStat {
+  name: string;
+  totalUsers: number;
 }
 
 export interface StatsProps {

@@ -18,13 +18,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { format } from "date-fns";
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "hsl(var(--chart-1))" },
-  { browser: "safari", visitors: 200, fill: "hsl(var(--chart-2))" },
-  { browser: "firefox", visitors: 287, fill: "hsl(var(--chart-3))" },
-  { browser: "edge", visitors: 173, fill: "hsl(var(--chart-4))" },
-  { browser: "other", visitors: 190, fill: "hsl(var(--chart-5))" },
-];
+import { StatsProps } from "@/types/reports-chart";
 
 const chartConfig = {
   visitors: {
@@ -38,7 +32,7 @@ const chartConfig = {
     label: "Safari",
     color: "hsl(var(--chart-2))",
   },
-  firefox: {
+  opera: {
     label: "Firefox",
     color: "hsl(var(--chart-3))",
   },
@@ -52,17 +46,36 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export default function BrowserUsage() {
+export default function BrowserUsage({ data }: StatsProps) {
   const currentDate = format(new Date(), "dd MMMM,yyyy");
-  const { totalVisitors, leadingBrowser } = React.useMemo(() => {
-    const total = chartData.reduce((acc, curr) => acc + curr.visitors, 0);
-    const leader = chartData.reduce(
-      (max, curr) => (curr.visitors > max.visitors ? curr : max),
-      chartData[0]
-    );
+  console.log("data", data);
+  const leadingBrowser = React.useMemo(() => {
+    if (!data || data.length === 0) {
+      return {
+        name: "No browser",
+        ideas: 0,
+      };
+    }
 
-    return { totalVisitors: total, leadingBrowser: leader };
-  }, []);
+    return data.reduce((max, current) => {
+      return (current.ideas || 0) > (max.ideas || 0) ? current : max;
+    }, data[0]);
+  }, [data]);
+  const chartData = React.useMemo(() => {
+    if (!data) return [];
+
+    return data.map((item) => ({
+      ...item,
+      name: item?.name || "unknown",
+      fill: item?.name
+        ? chartConfig[item.name.toLowerCase()]?.color || "hsl(var(--chart-5))"
+        : "hsl(var(--chart-5))",
+    }));
+  }, [data]);
+  const totalVisitors = React.useMemo(() => {
+    if (!data) return 0;
+    return data.reduce((acc, curr) => acc + (curr.ideas || 0), 0);
+  }, [data]);
 
   return (
     <Card className="flex flex-col">
@@ -84,8 +97,8 @@ export default function BrowserUsage() {
             />
             <Pie
               data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
+              dataKey="ideas"
+              nameKey="name"
               innerRadius={60}
               strokeWidth={5}
             >
@@ -124,11 +137,10 @@ export default function BrowserUsage() {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          {leadingBrowser.browser.charAt(0).toUpperCase() +
-            leadingBrowser.browser.slice(1)}{" "}
-          leads with{" "}
-          {((leadingBrowser.visitors / totalVisitors) * 100).toFixed(1)}% market
-          share.
+          {leadingBrowser.name.charAt(0).toUpperCase() +
+            leadingBrowser.name.slice(1)}{" "}
+          leads with {((leadingBrowser.ideas / totalVisitors) * 100).toFixed(1)}
+          % market share.
         </div>
         <div className="leading-none text-muted-foreground">
           Based on browser usage statistics across all users.
