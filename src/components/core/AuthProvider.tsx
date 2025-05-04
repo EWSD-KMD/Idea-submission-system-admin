@@ -155,7 +155,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         accessToken: data.accessToken,
         user: decoded ? { id: decoded.userId } : null,
       });
-      router.push("/");
+      router.push("/reports-chart");
     },
     [router]
   );
