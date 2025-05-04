@@ -82,7 +82,7 @@ export async function serverFetch(endpoint: string, options: RequestInit = {}) {
   headers.set("Accept", "application/json");
 
   if (token) {
-    headers.set("Authorization", `Bearer abc`);
+    headers.set("Authorization", `Bearer ${token}`);
   }
   console.log("prev token", token);
   const response = await fetch(`${BASE_URL}/${endpoint}`, {
