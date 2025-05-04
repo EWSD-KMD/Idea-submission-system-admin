@@ -82,7 +82,7 @@ export async function serverFetch(endpoint: string, options: RequestInit = {}) {
   headers.set("Accept", "application/json");
 
   if (token) {
-    headers.set("Authorization", `Bearer ${token}`);
+    headers.set("Authorization", `Bearer abc`);
   }
   console.log("prev token", token);
   const response = await fetch(`${BASE_URL}/${endpoint}`, {
@@ -90,7 +90,6 @@ export async function serverFetch(endpoint: string, options: RequestInit = {}) {
     headers,
   });
 
-  // If the token is expired, try refreshing it
   if (response.status === 401) {
     console.warn("Access token expired. Attempting to refresh...");
 
@@ -100,10 +99,22 @@ export async function serverFetch(endpoint: string, options: RequestInit = {}) {
 
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
-      return fetch(`${BASE_URL}/${endpoint}`, {
+
+      const response = await fetch(`${BASE_URL}/${endpoint}`, {
         ...options,
         headers,
-      }).then((res) => res.json());
+      })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+
+    console.log("data", data)
+    
+    return data;
+
     }
   }
 
