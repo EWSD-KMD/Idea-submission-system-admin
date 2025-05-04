@@ -1,25 +1,25 @@
 "use client";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { DataTable } from "@/components/core/DataTable";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Idea, IdeaResponse } from "@/types/idea";
 import { usePermission } from "@/hooks/use-permissions";
-import { getAllIdeas } from "@/services/idea";
+// import { getAllIdeas } from "@/services/idea";
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-export default function IdeaTable() {
+export default function IdeaTable({ideas}: {ideas: IdeaResponse}) {
   const { canExport } = usePermission();
-  const [ideas, setIdeas] = useState<IdeaResponse | null>(null);
+  // const [ideas, setIdeas] = useState<IdeaResponse | null>(null);
 
-  useEffect(() => {
-    const fetchIdeas = async () => {
-      const response = await getAllIdeas();
-      setIdeas(response);
-    };
+  // useEffect(() => {
+  //   const fetchIdeas = async () => {
+  //     const response = await getAllIdeas();
+  //     setIdeas(response);
+  //   };
 
-    fetchIdeas();
-  }, []);
+  //   fetchIdeas();
+  // }, []);
 
   const handleExport = () => {
     const url = `${BASE_URL}/api/admin/idea/export`;
