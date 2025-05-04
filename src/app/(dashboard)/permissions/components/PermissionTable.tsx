@@ -19,6 +19,8 @@ export default function PermissionTable({
   permissions,
   menus,
 }: PermissionTableProps) {
+  console.log("permissions", permissions)
+  console.log("menus", menus)
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [selectedPermission, setSelectedPermission] =
@@ -91,8 +93,8 @@ export default function PermissionTable({
       </div>
 
       <DataTable
-        data={permissions?.data || []}
-        total={permissions?.meta?.total || 0}
+        data={permissions?.data?.data || []}
+        total={permissions?.data?.meta?.total || 0}
         columns={columns}
       />
 
@@ -100,7 +102,7 @@ export default function PermissionTable({
         open={open}
         setOpen={setOpen}
         data={selectedPermission}
-        menus={menus?.data}
+        menus={menus?.data?.data}
       />
     </div>
   );

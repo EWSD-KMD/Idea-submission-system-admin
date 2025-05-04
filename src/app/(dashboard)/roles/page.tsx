@@ -7,7 +7,7 @@ export default async function Page () {
 
   return (
     <div className="ml-6">
-      <RoleManagementForm permissions={permissions?.data}/>  
+      <RoleManagementForm permissions={permissions?.data?.data}/>  
     </div>
   )
 }

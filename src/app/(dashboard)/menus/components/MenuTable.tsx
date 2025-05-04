@@ -1,5 +1,4 @@
 "use client";
-import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { DataTable } from "@/components/core/DataTable";
 import ActionsDropdown from "@/components/core/DropDownAction";
@@ -17,7 +16,6 @@ type MenuTableProps = {
 
 export default function MenuTable({ menus }: MenuTableProps) {
   const router = useRouter();
-  const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
 
@@ -81,8 +79,8 @@ export default function MenuTable({ menus }: MenuTableProps) {
       </div>
 
       <DataTable
-        data={menus?.data || []}
-        total={menus?.meta?.total || 0}
+        data={menus?.data?.data || []}
+        total={menus?.data?.meta?.total || 0}
         columns={columns}
       />
 
