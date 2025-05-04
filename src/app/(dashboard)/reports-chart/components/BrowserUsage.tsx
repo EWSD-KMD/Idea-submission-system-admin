@@ -20,7 +20,7 @@ import {
 import { format } from "date-fns";
 import { StatsProps } from "@/types/reports-chart";
 
-const chartConfig = {
+const chartConfig: any = {
   visitors: {
     label: "Visitors",
   },
@@ -64,7 +64,7 @@ export default function BrowserUsage({ data }: StatsProps) {
   const chartData = React.useMemo(() => {
     if (!data) return [];
 
-    return data.map((item) => ({
+    return data.map((item: any) => ({
       ...item,
       name: item?.name || "unknown",
       fill: item?.name
