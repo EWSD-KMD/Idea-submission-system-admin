@@ -10,10 +10,15 @@ import { getReportChartData } from "@/services/report-chart";
 
 export default async function ReportsPage() {
   const response = (await getReportChartData()) as ReportChartResponse;
-  console.log("response", response);
+  console.log("response", response.data);
 
-  const { overview, departmentStats, categoryStats, popularIdeas } =
-    response.data;
+  const {
+    overview,
+    departmentStats,
+    categoryStats,
+    popularIdeas,
+    browserStats,
+  } = response.data;
 
   return (
     <div className="space-y-6 p-6">
@@ -47,7 +52,12 @@ export default async function ReportsPage() {
               ideas: cat.totalPosts,
             }))}
           />
-          <BrowserUsage />
+          <BrowserUsage
+            data={browserStats.map((browser) => ({
+              name: browser.name,
+              ideas: browser.totalUsers,
+            }))}
+          />
         </div>
 
         <PopularIdeas popularIdeas={popularIdeas} />

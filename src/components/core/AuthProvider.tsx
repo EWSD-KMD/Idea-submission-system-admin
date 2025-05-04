@@ -150,12 +150,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = useCallback(
     (data: { accessToken: string; refreshToken: string }) => {
       const decoded: JwtPayload = jwtDecode(data.accessToken);
+      console.log("data", decoded);
       setCookie(cookieName, data);
       setAuthState({
         accessToken: data.accessToken,
         user: decoded ? { id: decoded.userId } : null,
       });
-      router.push("/");
+
+      router.push("/reports-chart");
     },
     [router]
   );
