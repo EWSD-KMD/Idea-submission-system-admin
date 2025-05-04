@@ -79,7 +79,7 @@ export default function DepartmentTable({ departments }: DepartmentTableProps) {
     }
 
     return permittedActions;
-  }, [canUpdate, canDelete]);
+  }, [canUpdate, canDelete, handleDelete]);
 
   const columns: ColumnDef<Department>[] = [
     {

@@ -13,8 +13,6 @@ import { useRouter } from "next/navigation";
 import { getCookie, removeCookie, setCookie } from "@/lib/utils";
 import { jwtDecode } from "jwt-decode";
 import { serverFetch } from "@/services/serverFetch";
-import { access } from "fs";
-import { set } from "date-fns";
 
 // Types based on your actual data structure
 interface Menu {

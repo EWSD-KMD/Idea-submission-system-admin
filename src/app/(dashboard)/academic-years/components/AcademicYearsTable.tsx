@@ -106,7 +106,7 @@ export default function AcdemicYearTable({
     }
 
     return permittedActions;
-  }, [canUpdate, canDelete]);
+  }, [canUpdate, canDelete, handleEdit, handleDelete]);
 
   const columns: ColumnDef<AcademicYear>[] = [
     {

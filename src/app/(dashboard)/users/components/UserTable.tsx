@@ -68,7 +68,7 @@ export default function UserTable({
     }
 
     return permittedActions;
-  }, [canUpdate, canDelete]);
+  }, [canUpdate, canDelete, handleDelete]);
 
   const columns: ColumnDef<User>[] = [
     {

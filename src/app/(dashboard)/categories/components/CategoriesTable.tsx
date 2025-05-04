@@ -78,7 +78,7 @@ export default function CategoryTable({ categories }: CategoryTableProps) {
     }
 
     return permittedActions;
-  }, [canUpdate, canDelete]);
+  }, [canUpdate, canDelete, handleDelete]);
 
   const columns: ColumnDef<Category>[] = [
     {

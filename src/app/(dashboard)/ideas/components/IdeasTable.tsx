@@ -6,7 +6,6 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Idea, IdeaResponse } from "@/types/idea";
 import { usePermission } from "@/hooks/use-permissions";
-import { get } from "http";
 import { getAllIdeas } from "@/services/idea";
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 

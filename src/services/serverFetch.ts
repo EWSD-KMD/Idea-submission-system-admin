@@ -1,7 +1,6 @@
 "use server";
 
 import { decrypt, encrypt } from "@/lib/utils";
-import { access } from "fs";
 import { cookies } from "next/headers";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -76,10 +75,7 @@ export async function refreshAuthToken() {
 }
 
 export async function serverFetch(endpoint: string, options: RequestInit = {}) {
-  const cookieStore = await cookies();
-  const cookieName = process.env.NEXT_PUBLIC_AUTH_COOKIE_NAME as string;
-  const cookieValue = cookieStore.get(cookieName)?.value;
-  let token = await getAuthToken();
+  const token = await getAuthToken();
 
   const headers = new Headers(options.headers);
   headers.set("Content-Type", "application/json");
