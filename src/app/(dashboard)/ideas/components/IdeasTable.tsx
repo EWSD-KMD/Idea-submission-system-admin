@@ -1,31 +1,32 @@
-"use client"
-import { Input } from "@/components/ui/input"
-import { useState } from "react"
-import { DataTable } from "@/components/core/DataTable"
-import type { ColumnDef } from "@tanstack/react-table"
-import { Button } from "@/components/ui/button"
-import { Idea, IdeaResponse } from "@/types/idea"
-import { usePermission } from "@/hooks/use-permissions"
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
+"use client";
+import { useEffect, useState } from "react";
+import { DataTable } from "@/components/core/DataTable";
+import type { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
+import { Idea, IdeaResponse } from "@/types/idea";
+import { usePermission } from "@/hooks/use-permissions";
+import { getAllIdeas } from "@/services/idea";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
+export default function IdeaTable() {
+  const { canExport } = usePermission();
+  const [ideas, setIdeas] = useState<IdeaResponse | null>(null);
 
-type IdeaTableProps = {
-  ideas: IdeaResponse,
-}
+  useEffect(() => {
+    const fetchIdeas = async () => {
+      const response = await getAllIdeas();
+      setIdeas(response);
+    };
 
-export default function IdeaTable({
-  ideas
-}: IdeaTableProps) {
-  const { canExport } = usePermission()
-  const [search, setSearch] = useState("")
-
+    fetchIdeas();
+  }, []);
 
   const handleExport = () => {
     const url = `${BASE_URL}/api/admin/idea/export`;
-    
-    const a = document.createElement('a');
+
+    const a = document.createElement("a");
     a.href = url;
-    a.download = 'ideas_export.zip';
+    a.download = "ideas_export.zip";
     a.click();
   };
 
@@ -54,64 +55,50 @@ export default function IdeaTable({
       accessorKey: "category",
       header: "Category",
       cell: ({ row }) => {
-        const idea = row.original
-        return idea.category.name
+        const idea = row.original;
+        return idea.category.name;
       },
     },
     {
       accessorKey: "department",
       header: "Department",
       cell: ({ row }) => {
-        const idea = row.original
-        return idea.department.name
+        const idea = row.original;
+        return idea.department.name;
       },
     },
     {
       accessorKey: "academicYear",
       header: "Academic Year",
       cell: ({ row }) => {
-        const idea = row.original
-        return idea.academicYear.year
+        const idea = row.original;
+        return idea.academicYear.year;
       },
     },
     {
       accessorKey: "user",
       header: "User",
       cell: ({ row }) => {
-        const idea = row.original
-        return idea.user.name
+        const idea = row.original;
+        return idea.user.name;
       },
     },
-  ]
+  ];
 
   return (
     <div className="flex flex-col gap-8 p-4">
       <div className="flex flex-row gap-2 justify-end">
-        <Input
-          type="text"
-          placeholder="Search ..."
-          className="w-80"
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value)
-          }}
-        />
 
-        {
-          canExport("Idea") && 
-          <Button 
-            onClick={handleExport} 
-          >
-            Export Ideas
-         </Button>
-        }
+        {canExport("Idea") && (
+          <Button onClick={handleExport}>Export Ideas</Button>
+        )}
       </div>
 
-      <DataTable 
-        data={ideas?.data?.ideas || []} 
-        total={ideas?.data?.total || 0} columns={columns} 
+      <DataTable
+        data={ideas?.data?.ideas || []}
+        total={ideas?.data?.total || 0}
+        columns={columns}
       />
     </div>
-  )
+  );
 }
-

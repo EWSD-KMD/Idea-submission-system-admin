@@ -38,6 +38,7 @@ export default function AcdemicYearTable({
   const [selectedAcademicYear, setSlectedAcademicYear] =
     useState<AcademicYear | null>(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleEdit = (data: AcademicYear) => {
     setSlectedAcademicYear(data);
     setOpen(true);
@@ -48,6 +49,7 @@ export default function AcdemicYearTable({
     setOpen(true);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleDelete = async (data: AcademicYear) => {
     const response = await deleteAcademicYear(data.id);
 
@@ -106,7 +108,7 @@ export default function AcdemicYearTable({
     }
 
     return permittedActions;
-  }, [canUpdate, canDelete]);
+  }, [canUpdate, canDelete, handleEdit, handleDelete]);
 
   const columns: ColumnDef<AcademicYear>[] = [
     {

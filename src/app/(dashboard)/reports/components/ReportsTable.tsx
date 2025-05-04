@@ -1,5 +1,4 @@
 "use client"
-
 import { DataTable } from "@/components/core/DataTable"
 import ActionsDropdown from "@/components/core/DropDownAction"
 import type { ColumnDef } from "@tanstack/react-table"

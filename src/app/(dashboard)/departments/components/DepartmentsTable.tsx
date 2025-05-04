@@ -32,6 +32,7 @@ export default function DepartmentTable({ departments }: DepartmentTableProps) {
     setOpen(true);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleDelete = async (data: Department) => {
     try {
       const response = await deleteDepartment(data.id);
@@ -77,7 +78,7 @@ export default function DepartmentTable({ departments }: DepartmentTableProps) {
     }
 
     return permittedActions;
-  }, [canUpdate, canDelete]);
+  }, [canUpdate, canDelete, handleDelete]);
 
   const columns: ColumnDef<Department>[] = [
     {

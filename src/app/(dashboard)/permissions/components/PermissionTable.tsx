@@ -19,8 +19,6 @@ export default function PermissionTable({
   permissions,
   menus,
 }: PermissionTableProps) {
-  console.log("permissions", permissions)
-  console.log("menus", menus)
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [selectedPermission, setSelectedPermission] =

@@ -27,49 +27,49 @@ export function LoginForm({
     defaultValues: {
       email: "",
       password: "",
-      source: "ADMIN"
+      source: "ADMIN",
     },
     resolver: zodResolver(loginSchema),
   });
 
   const { toast } = useToast();
-  const { login } = useAuth()
-  const [isLoading, setIsLoading] = useState(false)
+  const { login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = async(data: LoginType) => {
-    console.log("data", data)
-    setIsLoading(true)
-    const response: LoginResponse = await userLogin(data)
+  const onSubmit = async (data: LoginType) => {
+    console.log("data", data);
+    setIsLoading(true);
+    const response: LoginResponse = await userLogin(data);
     if (response.message === "success") {
-      setIsLoading(false)
-      login(response.data)
+      setIsLoading(false);
+      login(response.data);
       toast({
         title: "Login Success",
         description: `${response.message}` || "Login Success!",
         variant: "default",
       });
-    }else {
-      setIsLoading(false)
+    } else {
+      setIsLoading(false);
       toast({
         title: "Login failed",
         description: `${response.message}` || "Login failed!",
         variant: "destructive",
       });
     }
-  }
+  };
 
   return (
     <div
       className={cn(
         "flex w-full max-w-[90%] flex-col gap-6 md:max-w-md",
-        className,
+        className
       )}
       {...props}
     >
       <Card>
         <CardContent className="pt-6">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-6">
               <div>
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -96,20 +96,17 @@ export function LoginForm({
                 )}
               </div>
 
-              <div>
+              {/* <div>
                 <a
                   href="/forgot-password"
                   className="ml-auto mt-2 inline-block text-sm underline-offset-4 hover:underline"
                 >
                   Forgot your password?
                 </a>
-              </div>
+              </div> */}
 
-              <Button
-                type="submit"
-                disabled={isLoading}
-              >
-                {isLoading ? (<Loader2 className="animate-spin" />) : "Login"}
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? <Loader2 className="animate-spin" /> : "Login"}
               </Button>
             </div>
           </form>
@@ -118,5 +115,3 @@ export function LoginForm({
     </div>
   );
 }
-
-

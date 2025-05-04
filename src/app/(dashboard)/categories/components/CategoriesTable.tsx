@@ -33,6 +33,7 @@ export default function CategoryTable({ categories }: CategoryTableProps) {
     setOpen(true);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleDelete = async (data: Category) => {
     try {
       const response = await deleteCategory(data.id);
@@ -61,14 +62,14 @@ export default function CategoryTable({ categories }: CategoryTableProps) {
   const actions = useMemo(() => {
     const permittedActions = [];
 
-    if (canUpdate("Category")) {
+    if (canUpdate("Categories")) {
       permittedActions.push({
         label: "Edit",
         onClick: handleEdit,
       });
     }
 
-    if (canDelete("Category")) {
+    if (canDelete("Categories")) {
       permittedActions.push({
         label: "Delete",
         onClick: handleDelete,
@@ -76,7 +77,7 @@ export default function CategoryTable({ categories }: CategoryTableProps) {
     }
 
     return permittedActions;
-  }, [canUpdate, canDelete]);
+  }, [canUpdate, canDelete, handleDelete]);
 
   const columns: ColumnDef<Category>[] = [
     {
