@@ -7,9 +7,12 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const getAuthToken = async () => {
   const cookieStore = await cookies();
+  console.log("cookieName", process.env.NEXT_PUBLIC_AUTH_COOKIE_NAME)
   const authCookie = cookieStore.get(
     process.env.NEXT_PUBLIC_AUTH_COOKIE_NAME as string
   );
+
+  console.log("getAuthToken cookie", authCookie)
   if (!authCookie?.value) return null;
 
   try {
