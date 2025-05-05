@@ -3,7 +3,7 @@ import { DataTable } from "@/components/core/DataTable"
 import ActionsDropdown from "@/components/core/DropDownAction"
 import type { ColumnDef } from "@tanstack/react-table"
 import type { Report, ReportResponse } from "@/types/report"
-import { disableOrEnableUser, fullyDisableOrEnableUser } from "@/services/report"
+import { disableOrEnableUser, fullyDisableOrEnableUser, hideOrUnhideIdea } from "@/services/report"
 import { toast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
 import { usePermission } from "@/hooks/use-permissions"
@@ -14,7 +14,7 @@ type ReportTableProps = {
 
 export default function ReportTable({ reports }: ReportTableProps) {
 
-  const { canDisable, canFullyDisable } = usePermission()
+  const { canDisable, canFullyDisable, canHide } = usePermission()
   const router = useRouter()
 
   const handleDisableUser = async (report: Report) => {
@@ -73,9 +73,34 @@ export default function ReportTable({ reports }: ReportTableProps) {
     }
   }
 
+  const handleHideIdea = async (report: Report) => {
+    const currentStatus = report.idea.status
+
+    try {
+      const response = await hideOrUnhideIdea(report.idea.id)
+
+      if (response.message === "success") {
+        toast({
+          title: "Success",
+          description: currentStatus !== "HIDE" ? "hide idea successfully" : "unhide idea successfully",
+        })
+        router .refresh()
+      } else {
+        throw new Error(response.message || "Operation failed")
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to process",
+        variant: "destructive",
+      })
+    }
+  }
+
   const getActions = (report: Report) => {
     const isDisabled = report.idea.user.disabledInd
     const isFullyDisabled = report.idea.user.fullyDisabledInd
+    const isHide = report.idea.status === "HIDE" ? true : false
   
     const actions = []
   
@@ -90,6 +115,13 @@ export default function ReportTable({ reports }: ReportTableProps) {
       actions.push({
         label: isFullyDisabled ? "Fully Enable User": "Fully Disable User",
         onClick: () => handleFullyDisableUser(report),
+      })
+    }
+
+    if (canHide("Report")) {
+      actions.push({
+        label: isHide ? "Unhide Idea": "Hide Idea",
+        onClick: () => handleHideIdea(report),
       })
     }
   
@@ -144,6 +176,14 @@ export default function ReportTable({ reports }: ReportTableProps) {
       cell: ({ row }) => {
         const report = row.original
         return report.idea.user.fullyDisabledInd?.toString()
+      },
+    },
+    {
+      accessorKey: "ideaStatus",
+      header: "Idea Status",
+      cell: ({ row }) => {
+        const report = row.original
+        return report.idea.status?.toString()
       },
     },
     {

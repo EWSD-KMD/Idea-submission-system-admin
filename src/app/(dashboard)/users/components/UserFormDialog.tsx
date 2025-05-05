@@ -94,6 +94,8 @@ export function UserFormDialog({ open, setOpen, departments, roles, data }: User
       const response = isEditMode ?
         await updateUser(data!.id, values) : await createUser(values)
 
+        console.log("res", response)
+
       if (response.message === "success") {
         toast({
           title: "Success",

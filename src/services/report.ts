@@ -26,3 +26,15 @@ export async function fullyDisableOrEnableUser(id: number, data : {disabledInd: 
 return response
   
 }
+
+export async function hideOrUnhideIdea(ideaId: number) {
+  const response = await serverFetch(`api/admin/idea/${ideaId}/hide`, {
+    method: "POST"
+})
+
+console.log("response", response)
+
+return response
+  
+}
+

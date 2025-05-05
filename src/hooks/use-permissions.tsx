@@ -36,6 +36,7 @@ export function usePermission() {
       canDelete: (menuName: string) => can("DELETE", menuName),
       canExport: (menuName: string) => can("EXPORT", menuName),
       canDisable: (menuName: string) => can("DISABLE", menuName),
+      canHide: (menuName: string) => can("HIDE", menuName),
       canFullyDisable: (menuName: string) => can("FULLY_DISABLE", menuName),
       canEnable: (menuName: string) => can("ENABLE", menuName),
       isLoading: profileLoading

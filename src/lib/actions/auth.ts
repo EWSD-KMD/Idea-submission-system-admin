@@ -41,11 +41,7 @@ export const refreshAuthToken = async () => {
     console.log("response in utils", response)
 
     if (!response.ok) {
-      return { 
-        accessToken: null, 
-        error: "REFRESH_FAILED",
-        shouldClearCookie: true 
-      };
+      console.log("fail")
     }
 
     const { data } = await response.json();

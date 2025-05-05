@@ -87,6 +87,15 @@ export default function UserTable({
       },
     },
     {
+      accessorKey: "departmentId",
+      header: "Department",
+      cell: ({ row }) => {
+        const departmentId = row.original.departmentId;
+        const department = departments.data?.departments.find((r) => r.id === departmentId);
+        return department?.name || departmentId;
+      },
+    },
+    {
       accessorKey: "type",
       header: "User Type",
     },
