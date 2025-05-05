@@ -180,7 +180,7 @@ export function UserFormDialog({ open, setOpen, departments, roles, data }: User
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>User Type</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value || undefined}>
+                  <Select onValueChange={field.onChange} value={field.value || undefined} disabled={isEditMode}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select user type" />
