@@ -157,7 +157,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user: decoded ? { id: decoded.userId } : null,
       });
 
-      router.push("/reports-chart");
+      router.replace("/reports-chart");
     },
     [router]
   );
