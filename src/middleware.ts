@@ -10,7 +10,7 @@ export default async function middleware(request: NextRequest) {
   )?.value;
   const authCookieValue = decrypt(rawAuthCookieValue);
 
-  const isLoggedIn = Boolean(authCookieValue.accessToken);
+  const isLoggedIn = Boolean(authCookieValue?.accessToken);
   const isLoginPage = pathname === loginPage;
 
   if (isLoginPage && isLoggedIn) {
