@@ -1,5 +1,5 @@
 // src/services/serverFetch.ts
-import { getAuthToken, refreshAuthToken } from "@/lib/actions/auth";
+import { getAuthToken } from "@/lib/actions/auth";
 
 export async function serverFetch(endpoint: string, options: RequestInit = {}) {
   const token = await getAuthToken();
@@ -9,29 +9,29 @@ export async function serverFetch(endpoint: string, options: RequestInit = {}) {
   headers.set("Accept", "application/json");
   if (token) headers.set("Authorization", `Bearer ${token}`);
 
-  let response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${endpoint}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${endpoint}`, {
     ...options,
     headers,
   });
 
-  if (response.status === 401) {
-    const refreshResult = await refreshAuthToken();
+  // if (response.status === 401) {
+  //   const refreshResult = await refreshAuthToken();
     
-    if (refreshResult.accessToken) {
-      headers.set("Authorization", `Bearer ${refreshResult.accessToken}`);
+  //   if (refreshResult.accessToken) {
+  //     headers.set("Authorization", `Bearer ${refreshResult.accessToken}`);
       
-      response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${endpoint}`, {
-        ...options,
-        headers,
-      });
-    }
+  //     response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${endpoint}`, {
+  //       ...options,
+  //       headers,
+  //     });
+  //   }
 
-    console.log("response server ", response)
+  //   console.log("response server ", response)
     
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-  }
+    // if (!response.ok) {
+    //   throw new Error(`HTTP error! status: ${response.status}`);
+    // }
+  // }
 
   return response.json();
 }
